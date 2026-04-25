@@ -25,3 +25,9 @@ npm run build
 ```bash
 npm run test:run
 ```
+
+Проверить код линтером:
+
+```bash
+npm run lint
+```

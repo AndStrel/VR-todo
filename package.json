@@ -1,4 +1,4 @@
-{
+ы{
   "name": "test-todo-list",
   "private": true,
   "version": "0.1.0",
@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run",

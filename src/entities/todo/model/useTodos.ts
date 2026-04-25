@@ -6,14 +6,13 @@ import {
   getTodos,
   updateTodo,
 } from '../api/todoApi';
-import type { Todo } from './types';
+import type { Todo, UpdateTodoDto } from './types';
 
 const TODOS_QUERY_KEY = ['todos'] as const;
 
 type UpdateTodoMutationVariables = {
   id: Todo['id'];
-  title: Todo['title'];
-  updatedAt: Todo['updatedAt'];
+  todo: UpdateTodoDto;
 };
 
 export const useTodos = () => {
@@ -43,11 +42,8 @@ export const useTodos = () => {
   const {
     mutateAsync: updateTodoMutateAsync,
   } = useMutation({
-    mutationFn: ({
-      id,
-      title,
-      updatedAt,
-    }: UpdateTodoMutationVariables) => updateTodo(id, { title, updatedAt }),
+    mutationFn: ({ id, todo }: UpdateTodoMutationVariables) =>
+      updateTodo(id, todo),
     onSettled: () => {
       setUpdatingTodoId(null);
     },
@@ -80,8 +76,22 @@ export const useTodos = () => {
 
     await updateTodoMutateAsync({
       id,
-      title,
-      updatedAt: new Date().toISOString(),
+      todo: {
+        title,
+        updatedAt: new Date().toISOString(),
+      },
+    });
+  };
+
+  const handleToggleTodo = async (todo: Todo) => {
+    setUpdatingTodoId(todo.id);
+
+    await updateTodoMutateAsync({
+      id: todo.id,
+      todo: {
+        completed: !todo.completed,
+        updatedAt: new Date().toISOString(),
+      },
     });
   };
 
@@ -95,6 +105,7 @@ export const useTodos = () => {
     deletingTodoId,
     handleCreateTodo,
     handleDeleteTodo,
+    handleToggleTodo,
     handleUpdateTodo,
     isCreatePending,
     isError,

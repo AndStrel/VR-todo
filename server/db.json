@@ -3,23 +3,23 @@
     {
       "id": 1,
       "title": "Развернуть тудуху",
-      "completed": true,
+      "completed": false,
       "createdAt": "2026-04-25T09:00:00.000Z",
-      "updatedAt": "2026-04-25T09:00:00.000Z"
+      "updatedAt": "2026-04-25T17:09:07.309Z"
     },
     {
       "id": 2,
       "title": "Подключить локальный сервер",
       "completed": false,
       "createdAt": "2026-04-25T09:10:00.000Z",
-      "updatedAt": "2026-04-25T09:10:00.000Z"
+      "updatedAt": "2026-04-25T16:21:14.987Z"
     },
     {
       "id": 3,
       "title": "Проверить запросы",
       "completed": false,
       "createdAt": "2026-04-25T09:20:00.000Z",
-      "updatedAt": "2026-04-25T09:20:00.000Z"
+      "updatedAt": "2026-04-25T16:21:07.445Z"
     }
   ]
 }

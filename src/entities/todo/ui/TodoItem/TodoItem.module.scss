@@ -9,8 +9,15 @@
   background-color: var(--color-backdrop);
 
   &__title {
+    flex: 1;
     min-width: 0;
     overflow-wrap: anywhere;
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   &__actions {

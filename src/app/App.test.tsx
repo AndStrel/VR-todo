@@ -54,6 +54,12 @@ const editedTodo = {
   updatedAt: '2026-04-25T11:00:00.000Z',
 };
 
+const completedTodo = {
+  ...existingTodo,
+  completed: true,
+  updatedAt: '2026-04-25T12:00:00.000Z',
+};
+
 describe('App', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -257,5 +263,92 @@ describe('App', () => {
         method: 'DELETE',
       },
     );
+  });
+
+  it('marks an active task as completed and refreshes the list', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-04-25T12:00:00.000Z'));
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify([existingTodo])))
+      .mockResolvedValueOnce(new Response(JSON.stringify(completedTodo)))
+      .mockResolvedValueOnce(new Response(JSON.stringify([completedTodo])));
+    vi.stubGlobal('fetch', fetchMock);
+
+    try {
+      renderApp();
+
+      const checkbox = await screen.findByRole('checkbox', {
+        name: 'Выполнена',
+      });
+      expect(checkbox).not.toBeChecked();
+
+      await userEvent.click(checkbox);
+
+      expect(await screen.findByRole('checkbox', {
+        name: 'Выполнена',
+      })).toBeChecked();
+      expect(fetchMock).toHaveBeenNthCalledWith(
+        2,
+        'http://localhost:3001/todos/1',
+        expect.objectContaining({
+          body: expect.stringContaining('"completed":true'),
+          method: 'PATCH',
+        }),
+      );
+      expect(fetchMock).toHaveBeenNthCalledWith(
+        2,
+        'http://localhost:3001/todos/1',
+        expect.objectContaining({
+          body: expect.stringContaining(
+            '"updatedAt":"2026-04-25T12:00:00.000Z"',
+          ),
+        }),
+      );
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('marks a completed task as active and refreshes the list', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-04-25T12:00:00.000Z'));
+
+    const activeTodo = {
+      ...completedTodo,
+      completed: false,
+    };
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify([completedTodo])))
+      .mockResolvedValueOnce(new Response(JSON.stringify(activeTodo)))
+      .mockResolvedValueOnce(new Response(JSON.stringify([activeTodo])));
+    vi.stubGlobal('fetch', fetchMock);
+
+    try {
+      renderApp();
+
+      const checkbox = await screen.findByRole('checkbox', {
+        name: 'Выполнена',
+      });
+      expect(checkbox).toBeChecked();
+
+      await userEvent.click(checkbox);
+
+      expect(await screen.findByRole('checkbox', {
+        name: 'Выполнена',
+      })).not.toBeChecked();
+      expect(fetchMock).toHaveBeenNthCalledWith(
+        2,
+        'http://localhost:3001/todos/1',
+        expect.objectContaining({
+          body: expect.stringContaining('"completed":false'),
+          method: 'PATCH',
+        }),
+      );
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

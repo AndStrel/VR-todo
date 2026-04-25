@@ -7,6 +7,7 @@ export const App = () => {
     deletingTodoId,
     handleCreateTodo,
     handleDeleteTodo,
+    handleToggleTodo,
     handleUpdateTodo,
     isCreatePending,
     isError,
@@ -36,6 +37,7 @@ export const App = () => {
           <TodoList
             deletingTodoId={deletingTodoId}
             onDelete={handleDeleteTodo}
+            onToggle={handleToggleTodo}
             onUpdate={handleUpdateTodo}
             todos={todos}
             updatingTodoId={updatingTodoId}

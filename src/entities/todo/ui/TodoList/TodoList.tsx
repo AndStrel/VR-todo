@@ -5,6 +5,7 @@ import styles from './TodoList.module.scss';
 type TodoListProps = {
   deletingTodoId: Todo['id'] | null;
   onDelete: (id: Todo['id']) => Promise<void>;
+  onToggle: (todo: Todo) => Promise<void>;
   onUpdate: (id: Todo['id'], title: Todo['title']) => Promise<void>;
   todos: Todo[];
   updatingTodoId: Todo['id'] | null;
@@ -14,6 +15,7 @@ export const TodoList = (props: TodoListProps) => {
   const {
     deletingTodoId,
     onDelete,
+    onToggle,
     onUpdate,
     todos,
     updatingTodoId,
@@ -27,6 +29,7 @@ export const TodoList = (props: TodoListProps) => {
           isUpdating={updatingTodoId === todo.id}
           key={todo.id}
           onDelete={onDelete}
+          onToggle={onToggle}
           onUpdate={onUpdate}
           todo={todo}
         />

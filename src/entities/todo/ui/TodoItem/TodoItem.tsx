@@ -15,6 +15,7 @@ type TodoItemProps = {
   isDeleting: boolean;
   isUpdating: boolean;
   onDelete: (id: Todo['id']) => Promise<void>;
+  onToggle: (todo: Todo) => Promise<void>;
   onUpdate: (id: Todo['id'], title: Todo['title']) => Promise<void>;
   todo: Todo;
 };
@@ -24,6 +25,7 @@ export const TodoItem = (props: TodoItemProps) => {
     isDeleting,
     isUpdating,
     onDelete,
+    onToggle,
     onUpdate,
     todo,
   } = props;
@@ -84,6 +86,14 @@ export const TodoItem = (props: TodoItemProps) => {
     }
   };
 
+  const handleToggle = async () => {
+    try {
+      await onToggle(todo);
+    } catch {
+      // Ошибку мутации обработаем отдельным UI-блоком.
+    }
+  };
+
   if (isEditing) {
     return (
       <li className={styles.todoItem}>
@@ -120,6 +130,14 @@ export const TodoItem = (props: TodoItemProps) => {
 
   return (
     <li className={styles.todoItem}>
+      <label className={styles.todoItem__status}>
+        <input
+          checked={todo.completed}
+          disabled={isBusy}
+          onChange={handleToggle}
+          type="checkbox"
+        />
+      </label>
       <span className={styles.todoItem__title}>{todo.title}</span>
       <div className={styles.todoItem__actions}>
         <Button disabled={isBusy} onClick={handleEditStart} type="button">

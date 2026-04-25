@@ -108,6 +108,7 @@ export const TodoItem = (props: TodoItemProps) => {
               maxLength={TODO_TITLE_MAX_LENGTH}
               onChange={handleDraftTitleChange}
               onKeyDown={handleEditKeyDown}
+              onClear={() => setDraftTitle('')}
               value={draftTitle}
             />
           </label>

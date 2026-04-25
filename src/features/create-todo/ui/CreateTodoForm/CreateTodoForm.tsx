@@ -44,6 +44,7 @@ export const CreateTodoForm = (props: CreateTodoFormProps) => {
         <TextInput
           maxLength={TODO_TITLE_MAX_LENGTH}
           onChange={handleTitleChange}
+          onClear={() => setTitle('')}
           placeholder="Что нужно сделать?"
           value={title}
         />

@@ -1,14 +1,41 @@
 .textInput {
+  position: relative;
+  display: flex;
   width: 100%;
-  min-height: 44px;
-  padding: 0 14px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
   color: var(--item-text);
-  background-color: var(--item);
 
-  &:focus {
-    border-color: var(--action);
-    outline: none;
+  &__control {
+    width: 100%;
+    min-height: 44px;
+    padding: 0 42px 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: inherit;
+    background-color: var(--item);
+    font: inherit;
+
+    &:focus {
+      border-color: var(--action);
+      outline: none;
+    }
+  }
+
+  &__clearButton {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: var(--item-text);
+    background-color: transparent;
+    font-size: var(--font-size-lg);
+    line-height: 1;
+    transform: translateY(-50%);
   }
 }

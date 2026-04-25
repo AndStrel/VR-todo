@@ -19,6 +19,7 @@ export const SearchTodos = (props: SearchTodosProps) => {
       <span className={styles.searchTodos__labelText}>Поиск по задачам</span>
       <TextInput
         onChange={handleChange}
+        onClear={() => onChange('')}
         placeholder="Найти задачу"
         value={value}
       />

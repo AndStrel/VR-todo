@@ -1,44 +1,20 @@
-import { memo, useCallback } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createTodo, getTodos } from '../entities/todo';
-import { TodoList } from '../entities/todo';
+import { memo } from 'react';
+import { TodoList, useTodos } from '../entities/todo';
 import { CreateTodoForm } from '../features/create-todo';
 import styles from './App.module.scss';
 
 const AppComponent = () => {
-  const queryClient = useQueryClient();
   const {
-    data: todos = [],
+    deletingTodoId,
+    handleCreateTodo,
+    handleDeleteTodo,
+    handleUpdateTodo,
+    isCreatePending,
     isError,
     isLoading,
-  } = useQuery({
-    queryFn: getTodos,
-    queryKey: ['todos'],
-  });
-
-  const {
-    isPending: isCreatePending,
-    mutateAsync: createTodoMutateAsync,
-  } = useMutation({
-    mutationFn: createTodo,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['todos'] });
-    },
-  });
-
-  const handleCreateTodo = useCallback(
-    async (title: string) => {
-      const createdAt = new Date().toISOString();
-
-      await createTodoMutateAsync({
-        completed: false,
-        createdAt,
-        title,
-        updatedAt: createdAt,
-      });
-    },
-    [createTodoMutateAsync],
-  );
+    todos,
+    updatingTodoId,
+  } = useTodos();
 
   return (
     <main className={styles.app}>
@@ -57,7 +33,15 @@ const AppComponent = () => {
         {isError && (
           <p className={styles.app__status}>Не удалось загрузить задачи</p>
         )}
-        {!isLoading && !isError && <TodoList todos={todos} />}
+        {!isLoading && !isError && (
+          <TodoList
+            deletingTodoId={deletingTodoId}
+            onDelete={handleDeleteTodo}
+            onUpdate={handleUpdateTodo}
+            todos={todos}
+            updatingTodoId={updatingTodoId}
+          />
+        )}
       </section>
     </main>
   );

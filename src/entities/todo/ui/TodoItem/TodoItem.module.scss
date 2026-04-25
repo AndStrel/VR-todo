@@ -1,6 +1,53 @@
 .todoItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   padding: 12px 16px;
   border-radius: 8px;
   color: var(--color-text);
   background-color: var(--color-backdrop);
+
+  &__title {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  &__actions {
+    display: flex;
+    flex-shrink: 0;
+    gap: 8px;
+  }
+
+  &__editForm {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    gap: 12px;
+  }
+
+  &__editLabel {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    gap: 6px;
+  }
+
+  &__editLabelText {
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 640px) {
+  .todoItem {
+    align-items: stretch;
+    flex-direction: column;
+
+    &__actions,
+    &__editForm {
+      flex-direction: column;
+    }
+  }
 }

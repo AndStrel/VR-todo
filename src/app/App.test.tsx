@@ -40,9 +40,24 @@ const createTodo = {
   updatedAt: '2026-04-25T10:00:00.000Z',
 };
 
+const existingTodo = {
+  completed: false,
+  createdAt: '2026-04-25T09:10:00.000Z',
+  id: 1,
+  title: 'Подключить локальный сервер задач',
+  updatedAt: '2026-04-25T09:10:00.000Z',
+};
+
+const editedTodo = {
+  ...existingTodo,
+  title: 'Обновленная задача',
+  updatedAt: '2026-04-25T11:00:00.000Z',
+};
+
 describe('App', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.useRealTimers();
   });
 
   it('renders the task panel heading', () => {
@@ -138,5 +153,109 @@ describe('App', () => {
 
     expect(await screen.findByLabelText('Название новой задачи'))
       .toHaveAttribute('maxlength', '120');
+  });
+
+  it('edits a task title and refreshes the list', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date('2026-04-25T11:00:00.000Z'));
+
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify([existingTodo])))
+      .mockResolvedValueOnce(new Response(JSON.stringify(editedTodo)))
+      .mockResolvedValueOnce(new Response(JSON.stringify([editedTodo])));
+    vi.stubGlobal('fetch', fetchMock);
+
+    try {
+      renderApp();
+
+      await screen.findByText(existingTodo.title);
+      await userEvent.click(screen.getByRole('button', { name: 'Редактировать' }));
+      await userEvent.clear(screen.getByLabelText('Название задачи'));
+      await userEvent.type(
+        screen.getByLabelText('Название задачи'),
+        '  Обновленная задача  {Enter}',
+      );
+
+      expect(await screen.findByText('Обновленная задача')).toBeInTheDocument();
+      expect(fetchMock).toHaveBeenNthCalledWith(
+        2,
+        'http://localhost:3001/todos/1',
+        expect.objectContaining({
+          body: expect.stringContaining('"title":"Обновленная задача"'),
+          method: 'PATCH',
+        }),
+      );
+      expect(fetchMock).toHaveBeenNthCalledWith(
+        2,
+        'http://localhost:3001/todos/1',
+        expect.objectContaining({
+          body: expect.stringContaining(
+            '"updatedAt":"2026-04-25T11:00:00.000Z"',
+          ),
+        }),
+      );
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('cancels task editing with Escape without saving', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify([existingTodo])));
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderApp();
+
+    await screen.findByText(existingTodo.title);
+    await userEvent.click(screen.getByRole('button', { name: 'Редактировать' }));
+    await userEvent.clear(screen.getByLabelText('Название задачи'));
+    await userEvent.type(screen.getByLabelText('Название задачи'), 'Черновик');
+    await userEvent.keyboard('{Escape}');
+
+    expect(screen.getByText(existingTodo.title)).toBeInTheDocument();
+    expect(screen.queryByDisplayValue('Черновик')).not.toBeInTheDocument();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not save an empty edited task title', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify([existingTodo])));
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderApp();
+
+    await screen.findByText(existingTodo.title);
+    await userEvent.click(screen.getByRole('button', { name: 'Редактировать' }));
+    await userEvent.clear(screen.getByLabelText('Название задачи'));
+    await userEvent.type(screen.getByLabelText('Название задачи'), '   {Enter}');
+
+    expect(screen.getByLabelText('Название задачи')).toHaveValue('   ');
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('deletes a task and refreshes the list', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify([existingTodo])))
+      .mockResolvedValueOnce(new Response(null, { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify([])));
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderApp();
+
+    await screen.findByText(existingTodo.title);
+    await userEvent.click(screen.getByRole('button', { name: 'Удалить' }));
+
+    expect(await screen.findByRole('list')).toBeEmptyDOMElement();
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      2,
+      'http://localhost:3001/todos/1',
+      {
+        method: 'DELETE',
+      },
+    );
   });
 });

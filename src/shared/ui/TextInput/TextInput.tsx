@@ -1,19 +1,17 @@
-import { InputHTMLAttributes, memo } from 'react';
+import type { InputHTMLAttributes } from 'react';
 import styles from './TextInput.module.scss';
 
-type TextInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>;
+type TextInputProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'className' | 'type'
+>;
 
-export const TextInput = memo((props: TextInputProps) => {
-  const { className, ...inputProps } = props;
-  const inputClassName = className
-    ? `${styles.textInput} ${className}`
-    : styles.textInput;
-
+export const TextInput = (props: TextInputProps) => {
   return (
     <input
-      className={inputClassName}
+      className={styles.textInput}
       type="text"
-      {...inputProps}
+      {...props}
     />
   );
-});
+};

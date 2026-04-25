@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createTodo,
@@ -8,7 +8,7 @@ import {
 } from '../api/todoApi';
 import type { Todo } from './types';
 
-const TODOS_QUERY_KEY = ['todos'];
+const TODOS_QUERY_KEY = ['todos'] as const;
 
 type UpdateTodoMutationVariables = {
   id: Todo['id'];
@@ -29,12 +29,8 @@ export const useTodos = () => {
     queryKey: TODOS_QUERY_KEY,
   });
 
-  const invalidateTodos = useCallback(
-    async () => {
-      await queryClient.invalidateQueries({ queryKey: TODOS_QUERY_KEY });
-    },
-    [queryClient],
-  );
+  const invalidateTodos = () =>
+    queryClient.invalidateQueries({ queryKey: TODOS_QUERY_KEY });
 
   const {
     isPending: isCreatePending,
@@ -68,41 +64,32 @@ export const useTodos = () => {
     onSuccess: invalidateTodos,
   });
 
-  const handleCreateTodo = useCallback(
-    async (title: string) => {
-      const createdAt = new Date().toISOString();
+  const handleCreateTodo = async (title: string) => {
+    const createdAt = new Date().toISOString();
 
-      await createTodoMutateAsync({
-        completed: false,
-        createdAt,
-        title,
-        updatedAt: createdAt,
-      });
-    },
-    [createTodoMutateAsync],
-  );
+    await createTodoMutateAsync({
+      completed: false,
+      createdAt,
+      title,
+      updatedAt: createdAt,
+    });
+  };
 
-  const handleUpdateTodo = useCallback(
-    async (id: Todo['id'], title: Todo['title']) => {
-      setUpdatingTodoId(id);
+  const handleUpdateTodo = async (id: Todo['id'], title: Todo['title']) => {
+    setUpdatingTodoId(id);
 
-      await updateTodoMutateAsync({
-        id,
-        title,
-        updatedAt: new Date().toISOString(),
-      });
-    },
-    [updateTodoMutateAsync],
-  );
+    await updateTodoMutateAsync({
+      id,
+      title,
+      updatedAt: new Date().toISOString(),
+    });
+  };
 
-  const handleDeleteTodo = useCallback(
-    async (id: Todo['id']) => {
-      setDeletingTodoId(id);
+  const handleDeleteTodo = async (id: Todo['id']) => {
+    setDeletingTodoId(id);
 
-      await deleteTodoMutateAsync(id);
-    },
-    [deleteTodoMutateAsync],
-  );
+    await deleteTodoMutateAsync(id);
+  };
 
   return {
     deletingTodoId,

@@ -1,9 +1,8 @@
-import { memo } from 'react';
 import { TodoList, useTodos } from '../entities/todo';
 import { CreateTodoForm } from '../features/create-todo';
 import styles from './App.module.scss';
 
-const AppComponent = () => {
+export const App = () => {
   const {
     deletingTodoId,
     handleCreateTodo,
@@ -46,5 +45,3 @@ const AppComponent = () => {
     </main>
   );
 };
-
-export const App = memo(AppComponent);

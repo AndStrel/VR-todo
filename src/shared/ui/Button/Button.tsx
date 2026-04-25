@@ -1,27 +1,24 @@
-import { ButtonHTMLAttributes, memo } from 'react';
+import type { ButtonHTMLAttributes } from 'react';
 import styles from './Button.module.scss';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
   loading?: boolean;
 }
 
-export const Button = memo((props: ButtonProps) => {
+export const Button = (props: ButtonProps) => {
   const {
     children,
-    className,
     disabled,
     loading,
     type = 'button',
     ...buttonProps
   } = props;
   const isDisabled = disabled || loading;
-  const buttonClassName = className
-    ? `${styles.button} ${className}`
-    : styles.button;
 
   return (
     <button
-      className={buttonClassName}
+      className={styles.button}
       disabled={isDisabled}
       type={type}
       {...buttonProps}
@@ -37,4 +34,4 @@ export const Button = memo((props: ButtonProps) => {
       )}
     </button>
   );
-});
+};

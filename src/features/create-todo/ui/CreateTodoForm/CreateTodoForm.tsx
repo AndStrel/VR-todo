@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, memo, useCallback, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { Button } from '../../../../shared/ui/Button';
 import { TextInput } from '../../../../shared/ui/TextInput';
 import styles from './CreateTodoForm.module.scss';
@@ -10,36 +10,30 @@ type CreateTodoFormProps = {
   onCreate: (title: string) => Promise<void>;
 };
 
-export const CreateTodoForm = memo((props: CreateTodoFormProps) => {
+export const CreateTodoForm = (props: CreateTodoFormProps) => {
   const { isSubmitting, onCreate } = props;
   const [title, setTitle] = useState('');
 
-  const handleSubmit = useCallback(
-    async (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-      const trimmedTitle = title.trim();
+    const trimmedTitle = title.trim();
 
-      if (!trimmedTitle) {
-        return;
-      }
+    if (!trimmedTitle) {
+      return;
+    }
 
-      try {
-        await onCreate(trimmedTitle);
-        setTitle('');
-      } catch {
-        // Ошибку мутации обработаем отдельным UI-блоком.
-      }
-    },
-    [onCreate, title],
-  );
+    try {
+      await onCreate(trimmedTitle);
+      setTitle('');
+    } catch {
+      // Ошибку мутации обработаем отдельным UI-блоком.
+    }
+  };
 
-  const handleTitleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setTitle(event.currentTarget.value);
-    },
-    [],
-  );
+  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.currentTarget.value);
+  };
 
   return (
     <form className={styles.createTodoForm} onSubmit={handleSubmit}>
@@ -59,4 +53,4 @@ export const CreateTodoForm = memo((props: CreateTodoFormProps) => {
       </Button>
     </form>
   );
-});
+};

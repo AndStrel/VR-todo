@@ -2,9 +2,6 @@ import {
   ChangeEvent,
   FormEvent,
   KeyboardEvent,
-  memo,
-  useCallback,
-  useEffect,
   useState,
 } from 'react';
 import { Button } from '../../../../shared/ui/Button';
@@ -22,7 +19,7 @@ type TodoItemProps = {
   todo: Todo;
 };
 
-export const TodoItem = memo((props: TodoItemProps) => {
+export const TodoItem = (props: TodoItemProps) => {
   const {
     isDeleting,
     isUpdating,
@@ -34,73 +31,58 @@ export const TodoItem = memo((props: TodoItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const isBusy = isDeleting || isUpdating;
 
-  useEffect(() => {
-    if (!isEditing) {
-      setDraftTitle(todo.title);
-    }
-  }, [isEditing, todo.title]);
-
-  const handleEditStart = useCallback(() => {
+  const handleEditStart = () => {
     setDraftTitle(todo.title);
     setIsEditing(true);
-  }, [todo.title]);
+  };
 
-  const handleEditCancel = useCallback(() => {
+  const handleEditCancel = () => {
     setDraftTitle(todo.title);
     setIsEditing(false);
-  }, [todo.title]);
+  };
 
-  const handleDraftTitleChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setDraftTitle(event.currentTarget.value);
-    },
-    [],
-  );
+  const handleDraftTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setDraftTitle(event.currentTarget.value);
+  };
 
-  const handleEditSubmit = useCallback(
-    async (event: FormEvent<HTMLFormElement>) => {
+  const handleEditSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const trimmedTitle = draftTitle.trim();
+
+    if (!trimmedTitle) {
+      return;
+    }
+
+    if (trimmedTitle === todo.title) {
+      setDraftTitle(todo.title);
+      setIsEditing(false);
+
+      return;
+    }
+
+    try {
+      await onUpdate(todo.id, trimmedTitle);
+      setIsEditing(false);
+    } catch {
+      // Ошибку мутации обработаем отдельным UI-блоком.
+    }
+  };
+
+  const handleEditKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
       event.preventDefault();
+      handleEditCancel();
+    }
+  };
 
-      const trimmedTitle = draftTitle.trim();
-
-      if (!trimmedTitle) {
-        return;
-      }
-
-      if (trimmedTitle === todo.title) {
-        setDraftTitle(todo.title);
-        setIsEditing(false);
-
-        return;
-      }
-
-      try {
-        await onUpdate(todo.id, trimmedTitle);
-        setIsEditing(false);
-      } catch {
-        // Ошибку мутации обработаем отдельным UI-блоком.
-      }
-    },
-    [draftTitle, onUpdate, todo.id, todo.title],
-  );
-
-  const handleEditKeyDown = useCallback(
-    (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        handleEditCancel();
-      }
-    },
-    [handleEditCancel],
-  );
-
-  const handleDelete = useCallback(async () => {
+  const handleDelete = async () => {
     try {
       await onDelete(todo.id);
     } catch {
       // Ошибку мутации обработаем отдельным UI-блоком.
     }
-  }, [onDelete, todo.id]);
+  };
 
   if (isEditing) {
     return (
@@ -149,4 +131,4 @@ export const TodoItem = memo((props: TodoItemProps) => {
       </div>
     </li>
   );
-});
+};

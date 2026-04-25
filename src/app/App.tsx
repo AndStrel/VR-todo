@@ -24,6 +24,7 @@ export const App = () => {
     isCreatePending,
     isError,
     isLoading,
+    mutationErrorMessage,
     todos,
     updatingTodoId,
   } = useTodos();
@@ -55,6 +56,11 @@ export const App = () => {
         )}
         {isError && (
           <p className={styles.app__status}>Не удалось загрузить задачи</p>
+        )}
+        {mutationErrorMessage && (
+          <p className={styles.app__status} role="alert">
+            {mutationErrorMessage}
+          </p>
         )}
         {!isLoading && !isError && (
           <>

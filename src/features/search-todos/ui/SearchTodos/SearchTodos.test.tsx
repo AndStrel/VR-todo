@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { SearchTodos } from './SearchTodos';
 
 describe('SearchTodos', () => {
-  it('changes and clears search query', async () => {
+  it('изменяет и очищает поисковый запрос', async () => {
     const handleChange = vi.fn();
 
     render(<SearchTodos onChange={handleChange} value="поиск" />);

@@ -18,6 +18,7 @@ type UpdateTodoMutationVariables = {
 export const useTodos = () => {
   const queryClient = useQueryClient();
   const [deletingTodoId, setDeletingTodoId] = useState<Todo['id'] | null>(null);
+  const [mutationErrorMessage, setMutationErrorMessage] = useState<string | null>(null);
   const [updatingTodoId, setUpdatingTodoId] = useState<Todo['id'] | null>(null);
   const {
     data: todos = [],
@@ -64,42 +65,67 @@ export const useTodos = () => {
   const handleCreateTodo = async (title: string) => {
     const createdAt = new Date().toISOString();
 
-    await createTodoMutateAsync({
-      completed: false,
-      createdAt,
-      title,
-      updatedAt: createdAt,
-    });
+    setMutationErrorMessage(null);
+
+    try {
+      await createTodoMutateAsync({
+        completed: false,
+        createdAt,
+        title,
+        updatedAt: createdAt,
+      });
+    } catch (error) {
+      setMutationErrorMessage('Не удалось создать задачу');
+      throw error;
+    }
   };
 
   const handleUpdateTodo = async (id: Todo['id'], title: Todo['title']) => {
     setUpdatingTodoId(id);
+    setMutationErrorMessage(null);
 
-    await updateTodoMutateAsync({
-      id,
-      todo: {
-        title,
-        updatedAt: new Date().toISOString(),
-      },
-    });
+    try {
+      await updateTodoMutateAsync({
+        id,
+        todo: {
+          title,
+          updatedAt: new Date().toISOString(),
+        },
+      });
+    } catch (error) {
+      setMutationErrorMessage('Не удалось обновить задачу');
+      throw error;
+    }
   };
 
   const handleToggleTodo = async (todo: Todo) => {
     setUpdatingTodoId(todo.id);
+    setMutationErrorMessage(null);
 
-    await updateTodoMutateAsync({
-      id: todo.id,
-      todo: {
-        completed: !todo.completed,
-        updatedAt: new Date().toISOString(),
-      },
-    });
+    try {
+      await updateTodoMutateAsync({
+        id: todo.id,
+        todo: {
+          completed: !todo.completed,
+          updatedAt: new Date().toISOString(),
+        },
+      });
+    } catch (error) {
+      setMutationErrorMessage('Не удалось обновить статус задачи');
+      throw error;
+    }
   };
 
   const handleDeleteTodo = async (id: Todo['id']) => {
     setDeletingTodoId(id);
+    setMutationErrorMessage(null);
 
-    await deleteTodoMutateAsync(id);
+    try {
+      await deleteTodoMutateAsync(id);
+    } catch (error) {
+      setMutationErrorMessage('Не удалось удалить задачу');
+      throw error;
+    }
   };
 
   return {
@@ -111,6 +137,7 @@ export const useTodos = () => {
     isCreatePending,
     isError,
     isLoading,
+    mutationErrorMessage,
     todos,
     updatingTodoId,
   };

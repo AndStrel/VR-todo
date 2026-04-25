@@ -11,7 +11,7 @@ const todo: Todo = {
 };
 
 describe('TodoList', () => {
-  it('renders empty state when list is empty and text is provided', () => {
+  it('показывает пустое состояние, если список пустой и передан текст', () => {
     render(
       <TodoList
         deletingTodoId={null}
@@ -28,7 +28,7 @@ describe('TodoList', () => {
     expect(screen.queryByRole('list')).not.toBeInTheDocument();
   });
 
-  it('renders todo items', () => {
+  it('показывает задачи', () => {
     render(
       <TodoList
         deletingTodoId={null}

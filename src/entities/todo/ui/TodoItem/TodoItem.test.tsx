@@ -30,7 +30,7 @@ const renderTodoItem = (todoOverride: Partial<Todo> = {}) => {
 };
 
 describe('TodoItem', () => {
-  it('submits trimmed edited title', async () => {
+  it('отправляет отредактированное название без лишних пробелов', async () => {
     const props = renderTodoItem();
 
     await userEvent.click(screen.getByRole('button', { name: 'Редактировать' }));
@@ -43,7 +43,7 @@ describe('TodoItem', () => {
     expect(props.onUpdate).toHaveBeenCalledWith(todo.id, 'Обновленная задача');
   });
 
-  it('cancels editing with Escape', async () => {
+  it('отменяет редактирование по Escape', async () => {
     const props = renderTodoItem();
 
     await userEvent.click(screen.getByRole('button', { name: 'Редактировать' }));
@@ -56,7 +56,7 @@ describe('TodoItem', () => {
     expect(props.onUpdate).not.toHaveBeenCalled();
   });
 
-  it('does not submit empty edited title', async () => {
+  it('не отправляет пустое отредактированное название', async () => {
     const props = renderTodoItem();
 
     await userEvent.click(screen.getByRole('button', { name: 'Редактировать' }));
@@ -67,7 +67,7 @@ describe('TodoItem', () => {
     expect(props.onUpdate).not.toHaveBeenCalled();
   });
 
-  it('clears edited title', async () => {
+  it('очищает редактируемое название', async () => {
     renderTodoItem();
 
     await userEvent.click(screen.getByRole('button', { name: 'Редактировать' }));
@@ -76,7 +76,7 @@ describe('TodoItem', () => {
     expect(screen.getByLabelText('Название задачи')).toHaveValue('');
   });
 
-  it('calls delete handler', async () => {
+  it('вызывает обработчик удаления', async () => {
     const props = renderTodoItem();
 
     await userEvent.click(screen.getByRole('button', { name: 'Удалить' }));
@@ -84,11 +84,20 @@ describe('TodoItem', () => {
     expect(props.onDelete).toHaveBeenCalledWith(todo.id);
   });
 
-  it('calls toggle handler', async () => {
+  it('вызывает обработчик переключения статуса', async () => {
     const props = renderTodoItem();
 
     await userEvent.click(screen.getByRole('checkbox', { name: 'Выполнена' }));
 
     expect(props.onToggle).toHaveBeenCalledWith(props.todo);
+  });
+
+  it('показывает пользовательское название как обычный текст', () => {
+    renderTodoItem({
+      title: '<img src=x onerror=alert(1)>',
+    });
+
+    expect(screen.getByText('<img src=x onerror=alert(1)>')).toBeInTheDocument();
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
   });
 });

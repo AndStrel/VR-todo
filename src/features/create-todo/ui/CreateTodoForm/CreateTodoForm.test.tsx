@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { CreateTodoForm } from './CreateTodoForm';
 
 describe('CreateTodoForm', () => {
-  it('submits trimmed task title', async () => {
+  it('отправляет название задачи без лишних пробелов', async () => {
     const handleCreate = vi.fn().mockResolvedValue(undefined);
     render(<CreateTodoForm isSubmitting={false} onCreate={handleCreate} />);
 
@@ -17,7 +17,7 @@ describe('CreateTodoForm', () => {
     expect(screen.getByLabelText('Название новой задачи')).toHaveValue('');
   });
 
-  it('does not submit empty task title', async () => {
+  it('не отправляет пустое название задачи', async () => {
     const handleCreate = vi.fn().mockResolvedValue(undefined);
     render(<CreateTodoForm isSubmitting={false} onCreate={handleCreate} />);
 
@@ -27,14 +27,14 @@ describe('CreateTodoForm', () => {
     expect(handleCreate).not.toHaveBeenCalled();
   });
 
-  it('limits new task title length', () => {
+  it('ограничивает длину названия новой задачи', () => {
     render(<CreateTodoForm isSubmitting={false} onCreate={vi.fn()} />);
 
     expect(screen.getByLabelText('Название новой задачи'))
       .toHaveAttribute('maxlength', '120');
   });
 
-  it('clears entered task title', async () => {
+  it('очищает введенное название задачи', async () => {
     render(<CreateTodoForm isSubmitting={false} onCreate={vi.fn()} />);
 
     await userEvent.type(screen.getByLabelText('Название новой задачи'), 'Текст');

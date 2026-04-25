@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { FilterTodos } from './FilterTodos';
 
 describe('FilterTodos', () => {
-  it('changes status filter', async () => {
+  it('изменяет фильтр по статусу', async () => {
     const handleChange = vi.fn();
 
     render(<FilterTodos onChange={handleChange} value="all" />);

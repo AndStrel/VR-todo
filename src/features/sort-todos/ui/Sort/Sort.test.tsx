@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { Sort } from './Sort';
 
 describe('Sort', () => {
-  it('changes sort mode', async () => {
+  it('изменяет режим сортировки', async () => {
     const handleChange = vi.fn();
 
     render(<Sort onChange={handleChange} value="newest" />);

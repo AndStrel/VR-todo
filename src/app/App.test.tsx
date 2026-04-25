@@ -68,7 +68,7 @@ describe('App', () => {
     vi.useRealTimers();
   });
 
-  it('renders the task panel heading', () => {
+  it('показывает заголовок панели задач', () => {
     mockFetch([]);
 
     renderApp();
@@ -78,7 +78,7 @@ describe('App', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders loaded tasks from the API', async () => {
+  it('показывает задачи, загруженные из API', async () => {
     mockFetch([existingTodo]);
 
     renderApp();
@@ -86,7 +86,7 @@ describe('App', () => {
     expect(await screen.findByText(existingTodo.title)).toBeInTheDocument();
   });
 
-  it('renders loading state while tasks are loading', () => {
+  it('показывает состояние загрузки, пока задачи загружаются', () => {
     vi.stubGlobal('fetch', vi.fn(() => new Promise(() => undefined)));
 
     renderApp();
@@ -94,7 +94,7 @@ describe('App', () => {
     expect(screen.getByText('Загружаем задачи...')).toBeInTheDocument();
   });
 
-  it('renders error state when tasks cannot be loaded', async () => {
+  it('показывает ошибку, если задачи не удалось загрузить', async () => {
     mockFetch({ message: 'Server error' }, false);
 
     renderApp();
@@ -103,7 +103,7 @@ describe('App', () => {
       .toBeInTheDocument();
   });
 
-  it('creates a task and refreshes the list', async () => {
+  it('создает задачу и обновляет список', async () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(new Response(JSON.stringify([])))
@@ -131,7 +131,27 @@ describe('App', () => {
     );
   });
 
-  it('edits a task title and refreshes the list', async () => {
+  it('показывает ошибку мутации, если создание задачи не удалось', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify([])))
+      .mockResolvedValueOnce(new Response(null, { status: 500 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderApp();
+
+    await screen.findByRole('list');
+    await userEvent.type(
+      screen.getByLabelText('Название новой задачи'),
+      'Новая задача',
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Добавить' }));
+
+    expect(await screen.findByRole('alert'))
+      .toHaveTextContent('Не удалось создать задачу');
+  });
+
+  it('редактирует название задачи и обновляет список', async () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date('2026-04-25T11:00:00.000Z'));
 
@@ -176,7 +196,28 @@ describe('App', () => {
     }
   });
 
-  it('deletes a task and refreshes the list', async () => {
+  it('показывает ошибку мутации, если редактирование задачи не удалось', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify([existingTodo])))
+      .mockResolvedValueOnce(new Response(null, { status: 500 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderApp();
+
+    await screen.findByText(existingTodo.title);
+    await userEvent.click(screen.getByRole('button', { name: 'Редактировать' }));
+    await userEvent.clear(screen.getByLabelText('Название задачи'));
+    await userEvent.type(
+      screen.getByLabelText('Название задачи'),
+      'Обновленная задача{Enter}',
+    );
+
+    expect(await screen.findByRole('alert'))
+      .toHaveTextContent('Не удалось обновить задачу');
+  });
+
+  it('удаляет задачу и обновляет список', async () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(new Response(JSON.stringify([existingTodo])))
@@ -199,7 +240,23 @@ describe('App', () => {
     );
   });
 
-  it('marks an active task as completed and refreshes the list', async () => {
+  it('показывает ошибку мутации, если удаление задачи не удалось', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify([existingTodo])))
+      .mockResolvedValueOnce(new Response(null, { status: 500 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderApp();
+
+    await screen.findByText(existingTodo.title);
+    await userEvent.click(screen.getByRole('button', { name: 'Удалить' }));
+
+    expect(await screen.findByRole('alert'))
+      .toHaveTextContent('Не удалось удалить задачу');
+  });
+
+  it('отмечает активную задачу выполненной и обновляет список', async () => {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(new Date('2026-04-25T12:00:00.000Z'));
 
@@ -243,5 +300,23 @@ describe('App', () => {
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it('показывает ошибку мутации, если обновление статуса задачи не удалось', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify([existingTodo])))
+      .mockResolvedValueOnce(new Response(null, { status: 500 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderApp();
+
+    const checkbox = await screen.findByRole('checkbox', {
+      name: 'Выполнена',
+    });
+    await userEvent.click(checkbox);
+
+    expect(await screen.findByRole('alert'))
+      .toHaveTextContent('Не удалось обновить статус задачи');
   });
 });

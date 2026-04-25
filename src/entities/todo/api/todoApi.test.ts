@@ -5,7 +5,7 @@ describe('todoApi', () => {
     vi.unstubAllGlobals();
   });
 
-  it('loads todos from localhost API by default', async () => {
+  it('по умолчанию загружает задачи из локального API', async () => {
     const fetchMock = vi.fn(() =>
       Promise.resolve(
         new Response(
@@ -36,7 +36,7 @@ describe('todoApi', () => {
     expect(fetchMock).toHaveBeenCalledWith('http://localhost:3001/todos');
   });
 
-  it('throws an error when API response is not ok', async () => {
+  it('выбрасывает ошибку, если ответ API не успешный', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn(() => Promise.resolve(new Response(null, { status: 500 }))),
@@ -45,7 +45,7 @@ describe('todoApi', () => {
     await expect(getTodos()).rejects.toThrow('Не удалось загрузить задачи');
   });
 
-  it('creates a todo', async () => {
+  it('создает задачу', async () => {
     const fetchMock = vi.fn(() =>
       Promise.resolve(
         new Response(
@@ -87,7 +87,7 @@ describe('todoApi', () => {
     });
   });
 
-  it('updates a todo', async () => {
+  it('обновляет задачу', async () => {
     const fetchMock = vi.fn(() =>
       Promise.resolve(
         new Response(
@@ -127,7 +127,7 @@ describe('todoApi', () => {
     });
   });
 
-  it('deletes a todo', async () => {
+  it('удаляет задачу', async () => {
     const fetchMock = vi.fn(() =>
       Promise.resolve(new Response(null, { status: 200 })),
     );

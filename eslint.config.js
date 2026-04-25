@@ -41,4 +41,22 @@ export default tseslint.config(
       },
     },
   },
+  {
+    files: ['cypress.config.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
+    files: ['cypress/**/*.cy.ts'],
+    languageOptions: {
+      globals: {
+        cy: 'readonly',
+        describe: 'readonly',
+        it: 'readonly',
+      },
+    },
+  },
 );

@@ -8,7 +8,7 @@ describe('ThemeToggle', () => {
     localStorage.clear();
   });
 
-  it('switches theme and saves selected mode', async () => {
+  it('переключает тему и сохраняет выбранный режим', async () => {
     render(<ThemeToggle />);
 
     expect(document.documentElement).toHaveAttribute('data-theme', 'light');
@@ -21,7 +21,7 @@ describe('ThemeToggle', () => {
       .toBeInTheDocument();
   });
 
-  it('uses saved theme on start', () => {
+  it('использует сохраненную тему при запуске', () => {
     localStorage.setItem('todo-list-theme', 'dark');
 
     render(<ThemeToggle />);

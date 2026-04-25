@@ -30,7 +30,7 @@ const getTitles = (visibleTodos: Todo[]) =>
   visibleTodos.map((todo) => todo.title);
 
 describe('getVisibleTodos', () => {
-  it('filters tasks by search query', () => {
+  it('фильтрует задачи по поисковому запросу', () => {
     expect(getTitles(getVisibleTodos({
       searchQuery: 'поиск',
       sort: 'newest',
@@ -39,7 +39,7 @@ describe('getVisibleTodos', () => {
     }))).toEqual(['Написать поиск']);
   });
 
-  it('filters tasks by status', () => {
+  it('фильтрует задачи по статусу', () => {
     expect(getTitles(getVisibleTodos({
       searchQuery: '',
       sort: 'newest',
@@ -58,7 +58,7 @@ describe('getVisibleTodos', () => {
     ]);
   });
 
-  it('sorts tasks by date', () => {
+  it('сортирует задачи по дате', () => {
     expect(getTitles(getVisibleTodos({
       searchQuery: '',
       sort: 'oldest',
@@ -82,7 +82,7 @@ describe('getVisibleTodos', () => {
     ]);
   });
 
-  it('sorts tasks by status', () => {
+  it('сортирует задачи по статусу', () => {
     expect(getTitles(getVisibleTodos({
       searchQuery: '',
       sort: 'completed-first',

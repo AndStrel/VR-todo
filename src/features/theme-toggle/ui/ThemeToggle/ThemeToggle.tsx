@@ -1,21 +1,30 @@
+import { useEffect, useState } from 'react';
 import styles from './ThemeToggle.module.scss';
 
 export type ThemeMode = 'dark' | 'light';
 
-type ThemeToggleProps = {
-  onChange: (theme: ThemeMode) => void;
-  value: ThemeMode;
+const THEME_STORAGE_KEY = 'todo-list-theme';
+
+const getInitialTheme = (): ThemeMode => {
+  const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+
+  return savedTheme === 'dark' ? 'dark' : 'light';
 };
 
-export const ThemeToggle = (props: ThemeToggleProps) => {
-  const { onChange, value } = props;
-  const nextTheme = value === 'light' ? 'dark' : 'light';
+export const ThemeToggle = () => {
+  const [theme, setTheme] = useState<ThemeMode>(getInitialTheme);
+  const nextTheme = theme === 'light' ? 'dark' : 'light';
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+  }, [theme]);
 
   return (
     <button
       aria-label={nextTheme === 'dark' ? 'Темная тема' : 'Светлая тема'}
       className={styles.themeToggle}
-      onClick={() => onChange(nextTheme)}
+      onClick={() => setTheme(nextTheme)}
       type="button"
     >
       {nextTheme === 'dark' ? 'Темная тема' : 'Светлая тема'}

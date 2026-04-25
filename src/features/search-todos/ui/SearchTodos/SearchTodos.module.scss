@@ -1,0 +1,12 @@
+.searchTodos {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 220px;
+  gap: 8px;
+
+  &__labelText {
+    color: var(--panel-text);
+    font-size: var(--font-size-sm);
+  }
+}

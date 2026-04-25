@@ -24,53 +24,16 @@
   &__title {
     margin: 0;
     color: var(--panel-text);
-    font-size: clamp(2rem, 6vw, 4rem);
+    font-size: var(--font-size-xl);
     line-height: 1;
   }
 
   &__status {
     margin: 24px 0 0;
     color: var(--panel-text);
+    font-size: var(--font-size-md);
   }
 
-  &__controls {
-    display: grid;
-    grid-template-columns: minmax(180px, 1fr) auto minmax(180px, 240px);
-    align-items: end;
-    gap: 12px;
-    margin-top: 24px;
-  }
-
-  &__controlLabel {
-    display: grid;
-    gap: 8px;
-  }
-
-  &__controlLabelText {
-    color: var(--panel-text);
-    font-size: 0.95rem;
-  }
-
-  &__filterGroup {
-    display: flex;
-    gap: 8px;
-  }
-
-  &__filterButton {
-    min-height: 44px;
-    padding: 0 14px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--item-text);
-    background-color: var(--item);
-    font: inherit;
-
-    &:disabled {
-      color: var(--action-text);
-      background-color: var(--action);
-      cursor: default;
-    }
-  }
 }
 
 @media (max-width: 640px) {
@@ -83,14 +46,6 @@
 
     &__header {
       align-items: stretch;
-      flex-direction: column;
-    }
-
-    &__controls {
-      grid-template-columns: 1fr;
-    }
-
-    &__filterGroup {
       flex-direction: column;
     }
   }

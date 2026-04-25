@@ -392,20 +392,38 @@ describe('App', () => {
     expect(screen.queryByText('Завершить фильтры')).not.toBeInTheDocument();
   });
 
+  it('renders empty search state when no tasks match search query', async () => {
+    mockFetch(todosForListControls);
+
+    renderApp();
+
+    await screen.findByText('Подключить локальный сервер задач');
+    await userEvent.type(screen.getByLabelText('Поиск по задачам'), 'нет');
+
+    expect(screen.getByText('ничего не найдено')).toBeInTheDocument();
+    expect(screen.queryAllByRole('listitem')).toHaveLength(0);
+  });
+
   it('filters tasks by status', async () => {
     mockFetch(todosForListControls);
 
     renderApp();
 
     await screen.findByText('Подключить локальный сервер задач');
-    await userEvent.click(screen.getByRole('button', { name: 'Выполненные' }));
+    await userEvent.selectOptions(
+      screen.getByLabelText('Фильтр задач'),
+      'completed',
+    );
 
     expect(screen.getByText('Завершить фильтры')).toBeInTheDocument();
     expect(screen.queryByText('Подключить локальный сервер задач'))
       .not.toBeInTheDocument();
     expect(screen.queryByText('Написать поиск')).not.toBeInTheDocument();
 
-    await userEvent.click(screen.getByRole('button', { name: 'Активные' }));
+    await userEvent.selectOptions(
+      screen.getByLabelText('Фильтр задач'),
+      'active',
+    );
 
     expect(screen.getByText('Подключить локальный сервер задач'))
       .toBeInTheDocument();

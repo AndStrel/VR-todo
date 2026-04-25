@@ -1,0 +1,14 @@
+.todoControls {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+@media (max-width: 640px) {
+  .todoControls {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

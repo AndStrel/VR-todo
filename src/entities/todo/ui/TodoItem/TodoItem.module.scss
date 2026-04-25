@@ -43,7 +43,7 @@
   }
 
   &__editLabelText {
-    font-size: 14px;
+    font-size: var(--font-size-sm);
     font-weight: 600;
   }
 }

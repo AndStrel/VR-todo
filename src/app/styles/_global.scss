@@ -18,9 +18,15 @@
   --border: var(--color-accent);
   --panel-shadow: 0 24px 70px var(--color-backdrop-inverted);
   --font-family: "Arial", sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 24px;
+  --font-size-xl: 36px;
 
   color: var(--item-text);
   font-family: var(--font-family), serif;
+  font-size: var(--font-size-md);
 }
 
 :root[data-theme="dark"] {

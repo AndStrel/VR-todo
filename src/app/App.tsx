@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   getVisibleTodos,
   TodoList,
@@ -7,24 +7,14 @@ import {
   useTodos,
 } from '../entities/todo';
 import { CreateTodoForm } from '../features/create-todo';
-import { Sort } from '../features/sort-todos';
-import { ThemeToggle, type ThemeMode } from '../features/theme-toggle';
-import { TextInput } from '../shared/ui/TextInput';
+import { ThemeToggle } from '../features/theme-toggle';
+import { TodoControls } from '../widgets/todo-controls';
 import styles from './App.module.scss';
-
-const THEME_STORAGE_KEY = 'todo-list-theme';
-
-const getInitialTheme = (): ThemeMode => {
-  const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-
-  return savedTheme === 'dark' ? 'dark' : 'light';
-};
 
 export const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<TodoStatusFilter>('all');
   const [sort, setSort] = useState<TodoSort>('newest');
-  const [theme, setTheme] = useState<ThemeMode>(getInitialTheme);
   const {
     deletingTodoId,
     handleCreateTodo,
@@ -43,14 +33,8 @@ export const App = () => {
     statusFilter,
     todos,
   });
-  const handleSearchQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.currentTarget.value);
-  };
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    localStorage.setItem(THEME_STORAGE_KEY, theme);
-  }, [theme]);
+  const hasEmptySearchResult = Boolean(searchQuery.trim()) &&
+    visibleTodos.length === 0;
 
   return (
     <main className={styles.app}>
@@ -60,7 +44,7 @@ export const App = () => {
       >
         <div className={styles.app__header}>
           <h1 className={styles.app__title}>Панель задач</h1>
-          <ThemeToggle onChange={setTheme} value={theme} />
+          <ThemeToggle />
         </div>
         <CreateTodoForm
           isSubmitting={isCreatePending}
@@ -74,50 +58,17 @@ export const App = () => {
         )}
         {!isLoading && !isError && (
           <>
-            <div className={styles.app__controls}>
-              <label className={styles.app__controlLabel}>
-                <span className={styles.app__controlLabelText}>
-                  Поиск по задачам
-                </span>
-                <TextInput
-                  onChange={handleSearchQueryChange}
-                  placeholder="Найти задачу"
-                  value={searchQuery}
-                />
-              </label>
-              <div
-                className={styles.app__filterGroup}
-                aria-label="Фильтр задач"
-              >
-                <button
-                  className={styles.app__filterButton}
-                  disabled={statusFilter === 'all'}
-                  onClick={() => setStatusFilter('all')}
-                  type="button"
-                >
-                  Все
-                </button>
-                <button
-                  className={styles.app__filterButton}
-                  disabled={statusFilter === 'active'}
-                  onClick={() => setStatusFilter('active')}
-                  type="button"
-                >
-                  Активные
-                </button>
-                <button
-                  className={styles.app__filterButton}
-                  disabled={statusFilter === 'completed'}
-                  onClick={() => setStatusFilter('completed')}
-                  type="button"
-                >
-                  Выполненные
-                </button>
-              </div>
-              <Sort onChange={setSort} value={sort} />
-            </div>
+            <TodoControls
+              onSearchQueryChange={setSearchQuery}
+              onSortChange={setSort}
+              onStatusFilterChange={setStatusFilter}
+              searchQuery={searchQuery}
+              sort={sort}
+              statusFilter={statusFilter}
+            />
             <TodoList
               deletingTodoId={deletingTodoId}
+              emptyText={hasEmptySearchResult ? 'ничего не найдено' : undefined}
               onDelete={handleDeleteTodo}
               onToggle={handleToggleTodo}
               onUpdate={handleUpdateTodo}

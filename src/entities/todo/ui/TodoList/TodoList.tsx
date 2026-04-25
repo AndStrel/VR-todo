@@ -1,9 +1,11 @@
 import type { Todo } from '../../model/types';
+import { EmptyState } from '../../../../shared/ui/EmptyState';
 import { TodoItem } from '../TodoItem';
 import styles from './TodoList.module.scss';
 
 type TodoListProps = {
   deletingTodoId: Todo['id'] | null;
+  emptyText?: string;
   onDelete: (id: Todo['id']) => Promise<void>;
   onToggle: (todo: Todo) => Promise<void>;
   onUpdate: (id: Todo['id'], title: Todo['title']) => Promise<void>;
@@ -14,12 +16,17 @@ type TodoListProps = {
 export const TodoList = (props: TodoListProps) => {
   const {
     deletingTodoId,
+    emptyText,
     onDelete,
     onToggle,
     onUpdate,
     todos,
     updatingTodoId,
   } = props;
+
+  if (todos.length === 0 && emptyText) {
+    return <EmptyState text={emptyText} />;
+  }
 
   return (
     <ul className={styles.todoList}>

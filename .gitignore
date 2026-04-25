@@ -5,6 +5,7 @@ coverage
 .env
 .env.local
 .DS_Store
+.idea
 cypress/videos
 cypress/screenshots
 docs

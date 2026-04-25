@@ -14,6 +14,12 @@ npm install
 npm run dev
 ```
 
+Запустить локальный API:
+
+```bash
+npm run server
+```
+
 Проверить сборку:
 
 ```bash

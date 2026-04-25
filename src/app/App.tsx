@@ -1,8 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
-import { getTodos } from '../entities/todo';
+import { memo, useCallback } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { createTodo, getTodos } from '../entities/todo';
+import { TodoList } from '../entities/todo';
+import { CreateTodoForm } from '../features/create-todo';
 import styles from './App.module.scss';
 
-export function App() {
+const AppComponent = () => {
+  const queryClient = useQueryClient();
   const {
     data: todos = [],
     isError,
@@ -12,27 +16,51 @@ export function App() {
     queryKey: ['todos'],
   });
 
+  const {
+    isPending: isCreatePending,
+    mutateAsync: createTodoMutateAsync,
+  } = useMutation({
+    mutationFn: createTodo,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['todos'] });
+    },
+  });
+
+  const handleCreateTodo = useCallback(
+    async (title: string) => {
+      const createdAt = new Date().toISOString();
+
+      await createTodoMutateAsync({
+        completed: false,
+        createdAt,
+        title,
+        updatedAt: createdAt,
+      });
+    },
+    [createTodoMutateAsync],
+  );
+
   return (
     <main className={styles.app}>
       <section
-        className={styles.contentPanel}
+        className={styles.app__contentPanel}
         aria-label="Панель управления задачами"
       >
-        <h1 className={styles.title}>Панель задач</h1>
-        {isLoading && <p className={styles.status}>Загружаем задачи...</p>}
+        <h1 className={styles.app__title}>Панель задач</h1>
+        <CreateTodoForm
+          isSubmitting={isCreatePending}
+          onCreate={handleCreateTodo}
+        />
+        {isLoading && (
+          <p className={styles.app__status}>Загружаем задачи...</p>
+        )}
         {isError && (
-          <p className={styles.status}>Не удалось загрузить задачи</p>
+          <p className={styles.app__status}>Не удалось загрузить задачи</p>
         )}
-        {!isLoading && !isError && (
-          <ul className={styles.todoList}>
-            {todos.map((todo) => (
-              <li className={styles.todoItem} key={todo.id}>
-                {todo.title}
-              </li>
-            ))}
-          </ul>
-        )}
+        {!isLoading && !isError && <TodoList todos={todos} />}
       </section>
     </main>
   );
-}
+};
+
+export const App = memo(AppComponent);

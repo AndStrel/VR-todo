@@ -1,0 +1,24 @@
+.createTodoForm {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  margin-top: 24px;
+
+  &__label {
+    display: grid;
+    flex: 1;
+    gap: 8px;
+  }
+
+  &__labelText {
+    color: var(--color-text-inverse);
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .createTodoForm {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

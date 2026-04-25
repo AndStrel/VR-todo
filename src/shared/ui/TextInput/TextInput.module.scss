@@ -1,0 +1,14 @@
+.textInput {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--color-text);
+  background-color: var(--color-backdrop);
+
+  &:focus {
+    border-color: var(--color-accent);
+    outline: none;
+  }
+}

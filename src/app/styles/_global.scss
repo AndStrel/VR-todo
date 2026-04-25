@@ -2,14 +2,14 @@
   --color-page: #0c1627;
   --color-backdrop: #fdfeffd4;
   --color-primary: #284474;
+  --color-accent: #276cb0;
   --color-text: #0c1627;
   --color-text-inverse: #ffffff;
   --shadow-panel: 0 24px 70px rgb(12 22 39 / 32%);
   --font-main: "Arial", sans-serif;
 
   color: var(--color-text);
-  font-family:
-    var(--font-main);
+  font-family: var(--font-main), serif;
   background-color: var(--color-page);
 }
 

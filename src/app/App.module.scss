@@ -6,50 +6,34 @@
   padding: 32px;
   place-items: center;
   background-color: var(--color-backdrop);
-}
 
-.contentPanel {
-  width: min(100%, 960px);
-  padding: 32px;
-  border-radius: 8px;
-  box-shadow: var(--shadow-panel);
-  background-color: var(--color-primary);
-}
+  &__contentPanel {
+    width: min(100%, 960px);
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-panel);
+    background-color: var(--color-primary);
+  }
 
-.title {
-  margin: 0;
-  color: var(--color-text-inverse);
-  font-size: clamp(2rem, 6vw, 4rem);
-  line-height: 1;
-}
+  &__title {
+    margin: 0;
+    color: var(--color-text-inverse);
+    font-size: clamp(2rem, 6vw, 4rem);
+    line-height: 1;
+  }
 
-.status {
-  margin: 24px 0 0;
-  color: var(--color-text-inverse);
-}
-
-.todoList {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin: 24px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.todoItem {
-  padding: 12px 16px;
-  border-radius: 8px;
-  color: var(--color-text);
-  background-color: var(--color-backdrop);
+  &__status {
+    margin: 24px 0 0;
+    color: var(--color-text-inverse);
+  }
 }
 
 @media (max-width: 640px) {
   .app {
     padding: 16px;
-  }
 
-  .contentPanel {
-    padding: 24px;
+    &__contentPanel {
+      padding: 24px;
+    }
   }
 }

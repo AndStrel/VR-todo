@@ -1,11 +1,13 @@
+import styles from './App.module.scss';
+
 export function App() {
   return (
-    <main className="app">
+    <main className={styles.app}>
       <section
-        className="content-panel"
+        className={styles.contentPanel}
         aria-label="Панель управления задачами"
       >
-        <h1>Панель задач</h1>
+        <h1 className={styles.title}>Панель задач</h1>
       </section>
     </main>
   );

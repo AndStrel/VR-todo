@@ -1,0 +1,53 @@
+:root {
+  --color-page: #0c1627;
+  --color-backdrop: #fdfeffd4;
+  --color-primary: #284474;
+  --color-text: #0c1627;
+  --color-text-inverse: #ffffff;
+  --shadow-panel: 0 24px 70px rgb(12 22 39 / 32%);
+  --font-main: "Arial", sans-serif;
+
+  color: var(--color-text);
+  font-family:
+    var(--font-main);
+  background-color: var(--color-page);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background-color: var(--color-page);
+  background-image:
+    url("https://comp-sol.ru/wp-content/uploads/2020/10/Data.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+#root {
+  min-height: 100vh;
+}

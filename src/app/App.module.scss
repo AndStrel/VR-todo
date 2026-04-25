@@ -4,26 +4,33 @@
   justify-content: center;
   min-height: 100vh;
   padding: 32px;
-  background-color: var(--color-backdrop);
+  background-color: var(--backdrop);
 
   &__contentPanel {
     width: min(100%, 960px);
     padding: 32px;
     border-radius: 8px;
-    box-shadow: var(--shadow-panel);
-    background-color: var(--color-primary);
+    box-shadow: var(--panel-shadow);
+    background-color: var(--panel);
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
   }
 
   &__title {
     margin: 0;
-    color: var(--color-text-inverse);
+    color: var(--panel-text);
     font-size: clamp(2rem, 6vw, 4rem);
     line-height: 1;
   }
 
   &__status {
     margin: 24px 0 0;
-    color: var(--color-text-inverse);
+    color: var(--panel-text);
   }
 
   &__controls {
@@ -40,7 +47,7 @@
   }
 
   &__controlLabelText {
-    color: var(--color-text-inverse);
+    color: var(--panel-text);
     font-size: 0.95rem;
   }
 
@@ -52,15 +59,15 @@
   &__filterButton {
     min-height: 44px;
     padding: 0 14px;
-    border: 1px solid transparent;
+    border: 1px solid var(--border);
     border-radius: 8px;
-    color: var(--color-text);
-    background-color: var(--color-backdrop);
+    color: var(--item-text);
+    background-color: var(--item);
     font: inherit;
 
     &:disabled {
-      color: var(--color-text-inverse);
-      background-color: var(--color-accent);
+      color: var(--action-text);
+      background-color: var(--action);
       cursor: default;
     }
   }
@@ -72,6 +79,11 @@
 
     &__contentPanel {
       padding: 24px;
+    }
+
+    &__header {
+      align-items: stretch;
+      flex-direction: column;
     }
 
     &__controls {

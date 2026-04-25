@@ -6,8 +6,8 @@
   padding: 0 18px;
   border: 0;
   border-radius: 8px;
-  color: var(--color-text-inverse);
-  background-color: var(--color-accent);
+  color: var(--action-text);
+  background-color: var(--action);
   transition: opacity 0.3s ease-in-out;
 
   &:hover {

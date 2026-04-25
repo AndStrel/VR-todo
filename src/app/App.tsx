@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import {
   getVisibleTodos,
   TodoList,
@@ -8,13 +8,23 @@ import {
 } from '../entities/todo';
 import { CreateTodoForm } from '../features/create-todo';
 import { Sort } from '../features/sort-todos';
+import { ThemeToggle, type ThemeMode } from '../features/theme-toggle';
 import { TextInput } from '../shared/ui/TextInput';
 import styles from './App.module.scss';
+
+const THEME_STORAGE_KEY = 'todo-list-theme';
+
+const getInitialTheme = (): ThemeMode => {
+  const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+
+  return savedTheme === 'dark' ? 'dark' : 'light';
+};
 
 export const App = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<TodoStatusFilter>('all');
   const [sort, setSort] = useState<TodoSort>('newest');
+  const [theme, setTheme] = useState<ThemeMode>(getInitialTheme);
   const {
     deletingTodoId,
     handleCreateTodo,
@@ -37,13 +47,21 @@ export const App = () => {
     setSearchQuery(event.currentTarget.value);
   };
 
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem(THEME_STORAGE_KEY, theme);
+  }, [theme]);
+
   return (
     <main className={styles.app}>
       <section
         className={styles.app__contentPanel}
         aria-label="Панель управления задачами"
       >
-        <h1 className={styles.app__title}>Панель задач</h1>
+        <div className={styles.app__header}>
+          <h1 className={styles.app__title}>Панель задач</h1>
+          <ThemeToggle onChange={setTheme} value={theme} />
+        </div>
         <CreateTodoForm
           isSubmitting={isCreatePending}
           onCreate={handleCreateTodo}

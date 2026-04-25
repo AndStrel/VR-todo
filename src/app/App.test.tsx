@@ -86,6 +86,8 @@ const todosForListControls = [
 
 describe('App', () => {
   afterEach(() => {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.clear();
     vi.unstubAllGlobals();
     vi.useRealTimers();
   });
@@ -471,5 +473,31 @@ describe('App', () => {
         expect.stringContaining('Подключить локальный сервер задач'),
         expect.stringContaining('Завершить фильтры'),
       ]);
+  });
+
+  it('switches theme and saves the selected mode', async () => {
+    mockFetch([]);
+
+    renderApp();
+
+    expect(document.documentElement).toHaveAttribute('data-theme', 'light');
+
+    await userEvent.click(screen.getByRole('button', { name: 'Темная тема' }));
+
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+    expect(localStorage.getItem('todo-list-theme')).toBe('dark');
+    expect(screen.getByRole('button', { name: 'Светлая тема' }))
+      .toBeInTheDocument();
+  });
+
+  it('uses saved theme on start', () => {
+    localStorage.setItem('todo-list-theme', 'dark');
+    mockFetch([]);
+
+    renderApp();
+
+    expect(document.documentElement).toHaveAttribute('data-theme', 'dark');
+    expect(screen.getByRole('button', { name: 'Светлая тема' }))
+      .toBeInTheDocument();
   });
 });

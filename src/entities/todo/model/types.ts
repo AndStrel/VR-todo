@@ -1,0 +1,11 @@
+export type Todo = {
+  id: number;
+  title: string;
+  completed: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CreateTodoDto = Omit<Todo, 'id'>;
+
+export type UpdateTodoDto = Partial<Omit<Todo, 'id' | 'createdAt'>>;

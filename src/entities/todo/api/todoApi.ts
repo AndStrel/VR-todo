@@ -16,7 +16,7 @@ const getJson = async <T>(path: string, init?: RequestInit): Promise<T> => {
     throw new Error('Не удалось загрузить задачи');
   }
 
-  return response.json() as Promise<T>;
+  return await response.json() as T;
 };
 
 export const getTodos = () => getJson<Todo[]>('/todos');

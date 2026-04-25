@@ -1,0 +1,20 @@
+.sort {
+  display: grid;
+  gap: 8px;
+
+  &__labelText {
+    color: var(--color-text-inverse);
+    font-size: 0.95rem;
+  }
+
+  &__select {
+    width: 100%;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: var(--color-text);
+    background-color: var(--color-backdrop);
+    font: inherit;
+  }
+}

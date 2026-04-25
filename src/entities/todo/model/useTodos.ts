@@ -28,8 +28,9 @@ export const useTodos = () => {
     queryKey: TODOS_QUERY_KEY,
   });
 
-  const invalidateTodos = () =>
-    queryClient.invalidateQueries({ queryKey: TODOS_QUERY_KEY });
+  const invalidateTodos = async () => {
+    await queryClient.invalidateQueries({ queryKey: TODOS_QUERY_KEY });
+  };
 
   const {
     isPending: isCreatePending,

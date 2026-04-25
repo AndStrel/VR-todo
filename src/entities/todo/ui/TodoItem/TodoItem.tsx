@@ -1,7 +1,7 @@
 import {
   ChangeEvent,
-  FormEvent,
   KeyboardEvent,
+  SubmitEvent,
   useState,
 } from 'react';
 import { Button } from '../../../../shared/ui/Button';
@@ -47,7 +47,7 @@ export const TodoItem = (props: TodoItemProps) => {
     setDraftTitle(event.currentTarget.value);
   };
 
-  const handleEditSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleEditSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const trimmedTitle = draftTitle.trim();
@@ -137,6 +137,7 @@ export const TodoItem = (props: TodoItemProps) => {
           onChange={handleToggle}
           type="checkbox"
         />
+        <span>Выполнена</span>
       </label>
       <span className={styles.todoItem__title}>{todo.title}</span>
       <div className={styles.todoItem__actions}>

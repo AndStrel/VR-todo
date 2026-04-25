@@ -5,7 +5,7 @@
       "title": "Развернуть тудуху",
       "completed": false,
       "createdAt": "2026-04-25T09:00:00.000Z",
-      "updatedAt": "2026-04-25T17:32:57.293Z"
+      "updatedAt": "2026-04-25T17:40:53.798Z"
     },
     {
       "id": 2,
@@ -17,9 +17,9 @@
     {
       "id": 3,
       "title": "Проверить запросы",
-      "completed": false,
+      "completed": true,
       "createdAt": "2026-04-25T09:20:00.000Z",
-      "updatedAt": "2026-04-25T16:21:07.445Z"
+      "updatedAt": "2026-04-25T18:07:19.142Z"
     }
   ]
 }

@@ -1,8 +1,20 @@
-import { TodoList, useTodos } from '../entities/todo';
+import { ChangeEvent, useState } from 'react';
+import {
+  getVisibleTodos,
+  TodoList,
+  type TodoSort,
+  type TodoStatusFilter,
+  useTodos,
+} from '../entities/todo';
 import { CreateTodoForm } from '../features/create-todo';
+import { Sort } from '../features/sort-todos';
+import { TextInput } from '../shared/ui/TextInput';
 import styles from './App.module.scss';
 
 export const App = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<TodoStatusFilter>('all');
+  const [sort, setSort] = useState<TodoSort>('newest');
   const {
     deletingTodoId,
     handleCreateTodo,
@@ -15,6 +27,15 @@ export const App = () => {
     todos,
     updatingTodoId,
   } = useTodos();
+  const visibleTodos = getVisibleTodos({
+    searchQuery,
+    sort,
+    statusFilter,
+    todos,
+  });
+  const handleSearchQueryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.currentTarget.value);
+  };
 
   return (
     <main className={styles.app}>
@@ -34,14 +55,58 @@ export const App = () => {
           <p className={styles.app__status}>Не удалось загрузить задачи</p>
         )}
         {!isLoading && !isError && (
-          <TodoList
-            deletingTodoId={deletingTodoId}
-            onDelete={handleDeleteTodo}
-            onToggle={handleToggleTodo}
-            onUpdate={handleUpdateTodo}
-            todos={todos}
-            updatingTodoId={updatingTodoId}
-          />
+          <>
+            <div className={styles.app__controls}>
+              <label className={styles.app__controlLabel}>
+                <span className={styles.app__controlLabelText}>
+                  Поиск по задачам
+                </span>
+                <TextInput
+                  onChange={handleSearchQueryChange}
+                  placeholder="Найти задачу"
+                  value={searchQuery}
+                />
+              </label>
+              <div
+                className={styles.app__filterGroup}
+                aria-label="Фильтр задач"
+              >
+                <button
+                  className={styles.app__filterButton}
+                  disabled={statusFilter === 'all'}
+                  onClick={() => setStatusFilter('all')}
+                  type="button"
+                >
+                  Все
+                </button>
+                <button
+                  className={styles.app__filterButton}
+                  disabled={statusFilter === 'active'}
+                  onClick={() => setStatusFilter('active')}
+                  type="button"
+                >
+                  Активные
+                </button>
+                <button
+                  className={styles.app__filterButton}
+                  disabled={statusFilter === 'completed'}
+                  onClick={() => setStatusFilter('completed')}
+                  type="button"
+                >
+                  Выполненные
+                </button>
+              </div>
+              <Sort onChange={setSort} value={sort} />
+            </div>
+            <TodoList
+              deletingTodoId={deletingTodoId}
+              onDelete={handleDeleteTodo}
+              onToggle={handleToggleTodo}
+              onUpdate={handleUpdateTodo}
+              todos={visibleTodos}
+              updatingTodoId={updatingTodoId}
+            />
+          </>
         )}
       </section>
     </main>

@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, SubmitEvent, useState } from 'react';
 import { Button } from '../../../../shared/ui/Button';
 import { TextInput } from '../../../../shared/ui/TextInput';
 import styles from './CreateTodoForm.module.scss';
@@ -14,7 +14,7 @@ export const CreateTodoForm = (props: CreateTodoFormProps) => {
   const { isSubmitting, onCreate } = props;
   const [title, setTitle] = useState('');
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const trimmedTitle = title.trim();

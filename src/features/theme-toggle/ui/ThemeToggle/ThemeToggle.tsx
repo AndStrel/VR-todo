@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { FiMoon, FiSun } from 'react-icons/fi';
-import styles from './ThemeToggle.module.scss';
+import {FiMoon, FiSun} from 'react-icons/fi';
+import {Button} from "../../../../shared/ui/Button";
 
 export type ThemeMode = 'dark' | 'light';
 
@@ -22,9 +22,8 @@ export const ThemeToggle = () => {
   }, [theme]);
 
   return (
-    <button
+    <Button
       aria-label={nextTheme === 'dark' ? 'Темная тема' : 'Светлая тема'}
-      className={styles.themeToggle}
       onClick={() => setTheme(nextTheme)}
       type="button"
     >
@@ -33,6 +32,6 @@ export const ThemeToggle = () => {
       ) : (
         <FiSun aria-hidden="true" />
       )}
-    </button>
+    </Button>
   );
 };

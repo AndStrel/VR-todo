@@ -6,10 +6,9 @@ import {
 } from 'react';
 import { Button } from '../../../../shared/ui/Button';
 import { TextInput } from '../../../../shared/ui/TextInput';
+import { TODO_TITLE_MAX_LENGTH } from '../../model/constants';
 import type { Todo } from '../../model/types';
 import styles from './TodoItem.module.scss';
-
-const TODO_TITLE_MAX_LENGTH = 120;
 
 type TodoItemProps = {
   isDeleting: boolean;

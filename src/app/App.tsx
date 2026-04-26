@@ -34,8 +34,24 @@ export const App = () => {
     statusFilter,
     todos,
   });
-  const hasEmptySearchResult = Boolean(searchQuery.trim()) &&
-    visibleTodos.length === 0;
+  const completedCount = todos.filter((todo) => todo.completed).length;
+  const counts = {
+    active: todos.length - completedCount,
+    all: todos.length,
+    completed: completedCount,
+  };
+
+  const getEmptyText = () => {
+    if (searchQuery.trim() && visibleTodos.length === 0) {
+      return 'ничего не найдено';
+    }
+
+    if (todos.length === 0) {
+      return 'Задач пока нет';
+    }
+
+    return undefined;
+  };
 
   return (
     <main className={styles.app}>
@@ -65,17 +81,17 @@ export const App = () => {
         {!isLoading && !isError && (
           <>
             <TodoControls
+              counts={counts}
               onSearchQueryChange={setSearchQuery}
               onSortChange={setSort}
               onStatusFilterChange={setStatusFilter}
               searchQuery={searchQuery}
               sort={sort}
               statusFilter={statusFilter}
-              todos={todos}
             />
             <TodoList
               deletingTodoId={deletingTodoId}
-              emptyText={hasEmptySearchResult ? 'ничего не найдено' : undefined}
+              emptyText={getEmptyText()}
               onDelete={handleDeleteTodo}
               onToggle={handleToggleTodo}
               onUpdate={handleUpdateTodo}

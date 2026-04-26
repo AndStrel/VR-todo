@@ -1,6 +1,6 @@
 .app {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   min-height: 100vh;
   padding: 32px;
@@ -19,7 +19,7 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: 16px;
-  }
+    }
 
   &__title {
     margin: 0;
@@ -42,11 +42,6 @@
 
     &__contentPanel {
       padding: 24px;
-    }
-
-    &__header {
-      align-items: stretch;
-      flex-direction: column;
     }
   }
 }

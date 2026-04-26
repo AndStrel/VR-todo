@@ -57,9 +57,8 @@
     align-items: stretch;
     flex-direction: column;
 
-    &__actions,
-    &__editForm {
-      flex-direction: column;
+    &__actions {
+      justify-content: flex-end;
     }
   }
 }

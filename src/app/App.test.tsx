@@ -210,6 +210,28 @@ describe('App', () => {
       vi.useRealTimers();
     }
   });
+  it('отменяет редактирование по Escape и показывает старое название', async () => {
+    mockFetch([existingTodo]);
+
+    renderApp();
+
+    await screen.findByText(existingTodo.title);
+    await userEvent.click(screen.getByRole('button', { name: 'Редактировать' }));
+    await userEvent.clear(screen.getByLabelText('Название задачи'));
+    await userEvent.type(screen.getByLabelText('Название задачи'), 'Черновик');
+    await userEvent.keyboard('{Escape}');
+
+    expect(screen.getByText(existingTodo.title)).toBeInTheDocument();
+    expect(screen.queryByDisplayValue('Черновик')).not.toBeInTheDocument();
+  });
+
+  it('показывает пустое состояние, если задач нет', async () => {
+    mockFetch([]);
+
+    renderApp();
+
+    expect(await screen.findByText('Задач пока нет')).toBeInTheDocument();
+  });
 
   it('показывает ошибку мутации, если редактирование задачи не удалось', async () => {
     const fetchMock = vi

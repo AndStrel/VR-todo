@@ -3,6 +3,7 @@ import styles from './Button.module.scss';
 
 interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
+  iconOnly?: boolean;
   loading?: boolean;
 }
 
@@ -10,6 +11,7 @@ export const Button = (props: ButtonProps) => {
   const {
     children,
     disabled,
+    iconOnly,
     loading,
     type = 'button',
     ...buttonProps
@@ -18,7 +20,7 @@ export const Button = (props: ButtonProps) => {
 
   return (
     <button
-      className={styles.button}
+      className={`${styles.button} ${iconOnly ? styles.button_iconOnly : ''}`}
       disabled={isDisabled}
       type={type}
       {...buttonProps}

@@ -4,6 +4,12 @@ import {
   SubmitEvent,
   useState,
 } from 'react';
+import {
+  FiEdit2,
+  FiRotateCcw,
+  FiSave,
+  FiTrash2,
+} from 'react-icons/fi';
 import { Button } from '../../../../shared/ui/Button';
 import { TextInput } from '../../../../shared/ui/TextInput';
 import { TODO_TITLE_MAX_LENGTH } from '../../model/constants';
@@ -109,15 +115,22 @@ export const TodoItem = (props: TodoItemProps) => {
             />
           </label>
           <div className={styles.todoItem__actions}>
-            <Button loading={isUpdating} type="submit">
-              Сохранить
+            <Button
+              aria-label="Сохранить"
+              iconOnly
+              loading={isUpdating}
+              type="submit"
+            >
+              <FiSave aria-hidden="true" />
             </Button>
             <Button
+              aria-label="Отменить"
               disabled={isBusy}
+              iconOnly
               onClick={handleEditCancel}
               type="button"
             >
-              Отменить
+              <FiRotateCcw aria-hidden="true" />
             </Button>
           </div>
         </form>
@@ -129,6 +142,7 @@ export const TodoItem = (props: TodoItemProps) => {
     <li className={styles.todoItem}>
       <label className={styles.todoItem__status}>
         <input
+          aria-label="Выполнена"
           className={styles.todoItem__checkbox}
           checked={todo.completed}
           disabled={isBusy}
@@ -138,11 +152,23 @@ export const TodoItem = (props: TodoItemProps) => {
         <span className={styles.todoItem__title}>{todo.title}</span>
       </label>
       <div className={styles.todoItem__actions}>
-        <Button disabled={isBusy} onClick={handleEditStart} type="button">
-          Редактировать
+        <Button
+          aria-label="Редактировать"
+          disabled={isBusy}
+          iconOnly
+          onClick={handleEditStart}
+          type="button"
+        >
+          <FiEdit2 aria-hidden="true" />
         </Button>
-        <Button loading={isDeleting} onClick={handleDelete} type="button">
-          Удалить
+        <Button
+          aria-label="Удалить"
+          iconOnly
+          loading={isDeleting}
+          onClick={handleDelete}
+          type="button"
+        >
+          <FiTrash2 aria-hidden="true" />
         </Button>
       </div>
     </li>

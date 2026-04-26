@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { FiMoon, FiSun } from 'react-icons/fi';
 import styles from './ThemeToggle.module.scss';
 
 export type ThemeMode = 'dark' | 'light';
@@ -27,7 +28,11 @@ export const ThemeToggle = () => {
       onClick={() => setTheme(nextTheme)}
       type="button"
     >
-      {nextTheme === 'dark' ? 'Темная тема' : 'Светлая тема'}
+      {nextTheme === 'dark' ? (
+        <FiMoon aria-hidden="true" />
+      ) : (
+        <FiSun aria-hidden="true" />
+      )}
     </button>
   );
 };

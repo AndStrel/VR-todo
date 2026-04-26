@@ -1,4 +1,5 @@
 import { ChangeEvent, SubmitEvent, useState } from 'react';
+import { FiPlusCircle } from 'react-icons/fi';
 import { TODO_TITLE_MAX_LENGTH } from '../../../../entities/todo';
 import { Button } from '../../../../shared/ui/Button';
 import { TextInput } from '../../../../shared/ui/TextInput';
@@ -48,8 +49,13 @@ export const CreateTodoForm = (props: CreateTodoFormProps) => {
           value={title}
         />
       </label>
-      <Button loading={isSubmitting} type="submit">
-        Добавить
+      <Button
+        aria-label="Добавить"
+        iconOnly
+        loading={isSubmitting}
+        type="submit"
+      >
+        <FiPlusCircle aria-hidden="true" />
       </Button>
     </form>
   );

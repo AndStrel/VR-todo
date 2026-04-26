@@ -54,6 +54,7 @@ export const CreateTodoForm = (props: CreateTodoFormProps) => {
         iconOnly
         loading={isSubmitting}
         type="submit"
+        disabled={ title.length < 1 }
       >
         <FiPlusCircle aria-hidden="true" />
       </Button>

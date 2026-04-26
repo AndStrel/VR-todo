@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import type { ChangeEvent } from 'react';
 import type { TodoSort } from '../../../../entities/todo';
 import styles from './Sort.module.scss';
 

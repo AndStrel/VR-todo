@@ -22,7 +22,11 @@ describe('CreateTodoForm', () => {
     render(<CreateTodoForm isSubmitting={false} onCreate={handleCreate} />);
 
     await userEvent.type(screen.getByLabelText('Название новой задачи'), '   ');
-    await userEvent.click(screen.getByRole('button', { name: 'Добавить' }));
+
+    const submitButton = screen.getByRole('button', { name: 'Добавить' });
+
+    expect(submitButton).toBeDisabled();
+    await userEvent.click(submitButton);
 
     expect(handleCreate).not.toHaveBeenCalled();
   });

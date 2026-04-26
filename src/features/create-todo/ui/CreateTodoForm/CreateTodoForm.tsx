@@ -1,4 +1,5 @@
-import { ChangeEvent, SubmitEvent, useState } from 'react';
+import { useState } from 'react';
+import type { ChangeEvent, SubmitEvent } from 'react';
 import { FiPlusCircle } from 'react-icons/fi';
 import { TODO_TITLE_MAX_LENGTH } from '../../../../entities/todo';
 import { Button } from '../../../../shared/ui/Button';
@@ -13,6 +14,7 @@ type CreateTodoFormProps = {
 export const CreateTodoForm = (props: CreateTodoFormProps) => {
   const { isSubmitting, onCreate } = props;
   const [title, setTitle] = useState('');
+  const isSubmitDisabled = !title.trim();
 
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -51,10 +53,10 @@ export const CreateTodoForm = (props: CreateTodoFormProps) => {
       </label>
       <Button
         aria-label="Добавить"
+        disabled={isSubmitDisabled}
         iconOnly
         loading={isSubmitting}
         type="submit"
-        disabled={ title.length < 1 }
       >
         <FiPlusCircle aria-hidden="true" />
       </Button>

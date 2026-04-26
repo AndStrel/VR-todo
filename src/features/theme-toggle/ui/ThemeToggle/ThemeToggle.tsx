@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import {FiMoon, FiSun} from 'react-icons/fi';
-import {Button} from "../../../../shared/ui/Button";
+import { FiMoon, FiSun } from 'react-icons/fi';
+import { Button } from '../../../../shared/ui/Button';
 
 export type ThemeMode = 'dark' | 'light';
 
@@ -24,6 +24,7 @@ export const ThemeToggle = () => {
   return (
     <Button
       aria-label={nextTheme === 'dark' ? 'Темная тема' : 'Светлая тема'}
+      iconOnly
       onClick={() => setTheme(nextTheme)}
       type="button"
     >

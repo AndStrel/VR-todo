@@ -1,8 +1,10 @@
 import {
+  useState,
+} from 'react';
+import type {
   ChangeEvent,
   KeyboardEvent,
   SubmitEvent,
-  useState,
 } from 'react';
 import {
   FiEdit2,
@@ -37,6 +39,7 @@ export const TodoItem = (props: TodoItemProps) => {
   const [draftTitle, setDraftTitle] = useState(todo.title);
   const [isEditing, setIsEditing] = useState(false);
   const isBusy = isDeleting || isUpdating;
+  const canSaveDraft = Boolean(draftTitle.trim()) && !isBusy;
 
   const handleEditStart = () => {
     setDraftTitle(todo.title);
@@ -118,6 +121,7 @@ export const TodoItem = (props: TodoItemProps) => {
           <div className={styles.todoItem__actions}>
             <Button
               aria-label="Сохранить"
+              disabled={!canSaveDraft}
               iconOnly
               loading={isUpdating}
               type="submit"

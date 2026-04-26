@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import type { ChangeEvent } from 'react';
 import { TextInput } from '../../../../shared/ui/TextInput';
 import styles from './SearchTodos.module.scss';
 

@@ -17,10 +17,15 @@ export const Button = (props: ButtonProps) => {
     ...buttonProps
   } = props;
   const isDisabled = disabled || loading;
+  const className = [
+    styles.button,
+    iconOnly ? styles.button_iconOnly : null,
+  ].filter(Boolean).join(' ');
 
   return (
     <button
-      className={`${styles.button} ${iconOnly ? styles.button_iconOnly : ''}`}
+      aria-busy={loading || undefined}
+      className={className}
       disabled={isDisabled}
       type={type}
       {...buttonProps}

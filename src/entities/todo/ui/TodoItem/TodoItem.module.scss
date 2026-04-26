@@ -9,6 +9,11 @@
   color: var(--item-text);
   background-color: var(--item);
 
+  @media (max-width: 640px) {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
   &__title {
     flex: 1;
     min-width: 0;
@@ -34,6 +39,10 @@
     display: flex;
     flex-shrink: 0;
     gap: 8px;
+
+    @media (max-width: 640px) {
+      justify-content: flex-end;
+    }
   }
 
   &__editForm {
@@ -49,16 +58,5 @@
     flex-direction: column;
     min-width: 0;
     gap: 6px;
-  }
-}
-
-@media (max-width: 640px) {
-  .todoItem {
-    align-items: stretch;
-    flex-direction: column;
-
-    &__actions {
-      justify-content: flex-end;
-    }
   }
 }

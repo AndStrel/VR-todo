@@ -4,10 +4,8 @@
   flex-wrap: wrap;
   gap: 12px;
   margin-top: 24px;
-}
 
-@media (max-width: 640px) {
-  .todoControls {
+  @media (max-width: 640px) {
     align-items: stretch;
     flex-direction: column;
   }

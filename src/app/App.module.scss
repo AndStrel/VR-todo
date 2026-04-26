@@ -3,10 +3,14 @@
   align-items: flex-start;
   justify-content: center;
   height: 100vh;
-  height: 100dvh;
   padding: 32px;
   overflow: hidden;
   background-color: var(--backdrop);
+
+  @media (max-width: 640px) {
+    height: 100dvh;
+    padding: 16px;
+  }
 
   &__contentPanel {
     display: flex;
@@ -18,6 +22,10 @@
     border-radius: 8px;
     box-shadow: var(--panel-shadow);
     background-color: var(--panel);
+
+    @media (max-width: 640px) {
+      padding: 24px;
+    }
   }
 
   &__header {
@@ -38,16 +46,5 @@
     margin: 24px 0 0;
     color: var(--panel-text);
     font-size: var(--font-size-md);
-  }
-
-}
-
-@media (max-width: 640px) {
-  .app {
-    padding: 16px;
-
-    &__contentPanel {
-      padding: 24px;
-    }
   }
 }

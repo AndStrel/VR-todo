@@ -1,9 +1,8 @@
 import { ChangeEvent, SubmitEvent, useState } from 'react';
+import { TODO_TITLE_MAX_LENGTH } from '../../../../entities/todo';
 import { Button } from '../../../../shared/ui/Button';
 import { TextInput } from '../../../../shared/ui/TextInput';
 import styles from './CreateTodoForm.module.scss';
-
-const TODO_TITLE_MAX_LENGTH = 120;
 
 type CreateTodoFormProps = {
   isSubmitting: boolean;

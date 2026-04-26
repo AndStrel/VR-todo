@@ -48,12 +48,6 @@ const existingTodo = {
   updatedAt: '2026-04-25T09:10:00.000Z',
 };
 
-const editedTodo = {
-  ...existingTodo,
-  title: 'Обновленная задача',
-  updatedAt: '2026-04-25T11:00:00.000Z',
-};
-
 const completedTodo = {
   ...existingTodo,
   completed: true,
@@ -122,13 +116,12 @@ describe('App', () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(new Response(JSON.stringify([])))
-      .mockResolvedValueOnce(new Response(JSON.stringify(createTodo)))
-      .mockResolvedValueOnce(new Response(JSON.stringify([createTodo])));
+      .mockResolvedValueOnce(new Response(JSON.stringify(createTodo)));
     vi.stubGlobal('fetch', fetchMock);
 
     renderApp();
 
-    await screen.findByRole('list');
+    await screen.findByText('Задач пока нет');
     await userEvent.type(
       screen.getByLabelText('Название новой задачи'),
       '  Новая задача  ',
@@ -144,6 +137,7 @@ describe('App', () => {
         method: 'POST',
       }),
     );
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
   it('показывает ошибку мутации, если создание задачи не удалось', async () => {
@@ -155,7 +149,7 @@ describe('App', () => {
 
     renderApp();
 
-    await screen.findByRole('list');
+    await screen.findByText('Задач пока нет');
     await userEvent.type(
       screen.getByLabelText('Название новой задачи'),
       'Новая задача',
@@ -173,8 +167,7 @@ describe('App', () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(new Response(JSON.stringify([existingTodo])))
-      .mockResolvedValueOnce(new Response(JSON.stringify(editedTodo)))
-      .mockResolvedValueOnce(new Response(JSON.stringify([editedTodo])));
+      .mockResolvedValueOnce(new Response(JSON.stringify({ id: existingTodo.id })));
     vi.stubGlobal('fetch', fetchMock);
 
     try {
@@ -206,6 +199,7 @@ describe('App', () => {
           ),
         }),
       );
+      expect(fetchMock).toHaveBeenCalledTimes(2);
     } finally {
       vi.useRealTimers();
     }
@@ -258,8 +252,7 @@ describe('App', () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(new Response(JSON.stringify([existingTodo])))
-      .mockResolvedValueOnce(new Response(null, { status: 200 }))
-      .mockResolvedValueOnce(new Response(JSON.stringify([])));
+      .mockResolvedValueOnce(new Response(null, { status: 200 }));
     vi.stubGlobal('fetch', fetchMock);
 
     renderApp();
@@ -267,7 +260,7 @@ describe('App', () => {
     await screen.findByText(existingTodo.title);
     await userEvent.click(screen.getByRole('button', { name: 'Удалить' }));
 
-    expect(await screen.findByRole('list')).toBeEmptyDOMElement();
+    expect(await screen.findByText('Задач пока нет')).toBeInTheDocument();
     expect(fetchMock).toHaveBeenNthCalledWith(
       2,
       'http://localhost:3001/todos/1',
@@ -275,6 +268,7 @@ describe('App', () => {
         method: 'DELETE',
       },
     );
+    expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
   it('показывает ошибку мутации, если удаление задачи не удалось', async () => {
@@ -300,8 +294,7 @@ describe('App', () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(new Response(JSON.stringify([existingTodo])))
-      .mockResolvedValueOnce(new Response(JSON.stringify(completedTodo)))
-      .mockResolvedValueOnce(new Response(JSON.stringify([completedTodo])));
+      .mockResolvedValueOnce(new Response(JSON.stringify({ id: existingTodo.id })));
     vi.stubGlobal('fetch', fetchMock);
 
     try {
@@ -334,6 +327,7 @@ describe('App', () => {
           ),
         }),
       );
+      expect(fetchMock).toHaveBeenCalledTimes(2);
     } finally {
       vi.useRealTimers();
     }

@@ -105,6 +105,7 @@ export const TodoItem = (props: TodoItemProps) => {
         <form className={styles.todoItem__editForm} onSubmit={handleEditSubmit}>
           <label className={styles.todoItem__editLabel}>
             <TextInput
+              aria-label="Название задачи"
               autoFocus
               disabled={isBusy}
               maxLength={TODO_TITLE_MAX_LENGTH}

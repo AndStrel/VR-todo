@@ -1,3 +1,20 @@
+const API_URL = 'http://localhost:3001/todos';
+
+type ApiTodo = {
+  id: number;
+  title: string;
+};
+
+const cleanupE2eTasks = () => {
+  cy.request<ApiTodo[]>('GET', API_URL).then(({ body }) => {
+    body
+      .filter((todo) => todo.title.startsWith('E2E'))
+      .forEach((todo) => {
+        cy.request('DELETE', `${API_URL}/${todo.id}`);
+      });
+  });
+};
+
 const visitApp = () => {
   cy.visit('/');
   cy.contains('h1', 'Панель задач').should('be.visible');
@@ -5,18 +22,26 @@ const visitApp = () => {
 
 const addTask = (title: string) => {
   cy.get('input[placeholder="Что нужно сделать?"]').clear().type(title);
-  cy.contains('button', 'Добавить').click();
+  cy.get('button[aria-label="Добавить"]').click();
   cy.contains('li', title).should('be.visible');
 };
 
 const deleteTask = (title: string) => {
   cy.contains('li', title).within(() => {
-    cy.contains('button', 'Удалить').click();
+    cy.get('button[aria-label="Удалить"]').click();
   });
   cy.contains(title).should('not.exist');
 };
 
 describe('e2e сценарии управления задачами', () => {
+  beforeEach(() => {
+    cleanupE2eTasks();
+  });
+
+  afterEach(() => {
+    cleanupE2eTasks();
+  });
+
   it('добавляет задачу', () => {
     const title = `E2E добавление ${Date.now()}`;
 
@@ -31,12 +56,12 @@ describe('e2e сценарии управления задачами', () => {
 
     visitApp();
     addTask(title);
-    cy.contains('li', title).within(() => {
-      cy.contains('button', 'Редактировать').click();
-    });
-    cy.contains('form', 'Сохранить').within(() => {
-      cy.get('input').clear().type(`${editedTitle}{enter}`);
-    });
+    cy.contains('li', title)
+      .find('button[aria-label="Редактировать"]')
+      .click();
+    cy.get('input[aria-label="Название задачи"]')
+      .clear()
+      .type(`${editedTitle}{enter}`);
 
     cy.contains('li', editedTitle).should('be.visible');
     deleteTask(editedTitle);
@@ -92,7 +117,7 @@ describe('e2e сценарии управления задачами', () => {
     cy.document()
       .its('documentElement.dataset.theme')
       .should('eq', 'light');
-    cy.contains('button', 'Темная тема').click();
+    cy.get('button[aria-label="Темная тема"]').click();
     cy.document()
       .its('documentElement.dataset.theme')
       .should('eq', 'dark');
@@ -105,7 +130,7 @@ describe('e2e сценарии управления задачами', () => {
     cy.document()
       .its('documentElement.dataset.theme')
       .should('eq', 'dark');
-    cy.contains('button', 'Светлая тема').should('be.visible');
+    cy.get('button[aria-label="Светлая тема"]').should('be.visible');
   });
 
   it('открывает основной экран на мобильной ширине', () => {

@@ -1,38 +1,58 @@
-# Todo List
+# VR Todo
 
-## Запуск проекта
+Приложение для управления задачами: создание, редактирование, удаление, переключение статуса, поиск, фильтрация и сортировка.
 
-Установить зависимости:
+Демо: https://andstrel.github.io/VR-todo/
+
+## Стек
+
+- React
+- TypeScript
+- Vite
+- TanStack Query
+- SCSS Modules
+- Vitest + Testing Library
+- Cypress
+- json-server
+
+## Установка
 
 ```bash
 npm install
 ```
 
-Запустить приложение:
+## Локальный запуск
 
 ```bash
 npm run dev
 ```
 
-Запустить локальный API:
+Команда запускает фронтенд и локальный API:
 
-```bash
-npm run server
+- приложение: `http://localhost:5173/VR-todo/`
+- API: `http://localhost:3001/todos`
+
+Локально данные сохраняются в `server/db.json`.
+
+## Production API
+
+В production-сборке используется API из `.env.production`:
+
+```text
+https://jsonplaceholder.typicode.com
 ```
 
-Проверить сборку:
+На GitHub Pages приложение делает реальные `GET`, `POST`, `PATCH` и `DELETE` запросы, но JSONPlaceholder не сохраняет изменения после перезагрузки. Для проверки CRUD с сохранением данных используйте локальный запуск.
+
+## Команды
 
 ```bash
+npm run lint
+npm run test:run
 npm run build
 ```
 
-Запустить тесты:
-
-```bash
-npm run test:run
-```
-
-Запустить e2e-тесты Cypress:
+E2E-тесты:
 
 ```bash
 npm run dev
@@ -44,48 +64,28 @@ npm run dev
 npm run test:e2e
 ```
 
-Открыть Cypress App:
-
-```bash
-npm run test:e2e:open
-```
-
-Или запустить e2e-тесты одной коммандой:
+Открыть Cypress App вместе с dev-сервером:
 
 ```bash
 npm run cypress
 ```
 
-Открыть Cypress App вместе с dev-сервером:
-
-```bash
-npm run cypress:open
-```
-
-Команды `npm run cypress` и `npm run cypress:open` поднимают отдельные e2e-серверы на портах `5175` и `3011`, поэтому не конфликтуют с обычным `npm run dev`.
-
-## API
-
-В dev-режиме приложение использует локальный API:
-
-```text
-http://localhost:3001
-```
-
-Для production-сборки Vite подставляет `VITE_API_URL` из `.env.production`:
-
-```text
-https://jsonplaceholder.typicode.com
-```
-
-На GitHub Pages запросы `POST`, `PATCH` и `DELETE` выполняются, но JSONPlaceholder не сохраняет изменения после перезагрузки страницы. Для проверки CRUD с сохранением данных запускайте проект локально через `npm run dev`.
-
 ## Деплой
 
-Деплой на GitHub Pages выполняется через GitHub Actions при пуше в `main`. Workflow запускает lint, unit-тесты, production-сборку и публикует папку `dist`.
+Деплой на GitHub Pages выполняется через GitHub Actions при пуше в `main`.
 
-Проверить код линтером:
+Workflow:
 
-```bash
-npm run lint
-```
+1. Устанавливает зависимости через `npm ci`.
+2. Запускает `npm run lint`.
+3. Запускает `npm run test:run`.
+4. Собирает проект через `npm run build`.
+5. Публикует папку `dist` на GitHub Pages.
+
+## Безопасность
+
+- Пользовательский ввод рендерится как обычный текст.
+- Длинна строки ввода ограничена до 120 символов
+- `dangerouslySetInnerHTML` не используется.
+- Ошибки загрузки и мутаций показываются пользователю.
+- Есть тест на XSS-like строку: `<img src=x onerror=alert(1)>`.

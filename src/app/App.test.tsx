@@ -57,6 +57,8 @@ const editedTodo = {
 const completedTodo = {
   ...existingTodo,
   completed: true,
+  id: 3,
+  title: 'Проверить выполненную задачу',
   updatedAt: '2026-04-25T12:00:00.000Z',
 };
 
@@ -84,6 +86,19 @@ describe('App', () => {
     renderApp();
 
     expect(await screen.findByText(existingTodo.title)).toBeInTheDocument();
+  });
+
+  it('показывает счетчики всех, активных и выполненных задач в фильтре', async () => {
+    mockFetch([existingTodo, completedTodo]);
+
+    renderApp();
+
+    expect(await screen.findByRole('option', { name: 'Все (2)' }))
+      .toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Активные (1)' }))
+      .toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'Выполненные (1)' }))
+      .toBeInTheDocument();
   });
 
   it('показывает состояние загрузки, пока задачи загружаются', () => {

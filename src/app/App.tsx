@@ -71,6 +71,7 @@ export const App = () => {
               searchQuery={searchQuery}
               sort={sort}
               statusFilter={statusFilter}
+              todos={todos}
             />
             <TodoList
               deletingTodoId={deletingTodoId}

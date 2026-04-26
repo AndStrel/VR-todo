@@ -1,4 +1,4 @@
-import type { TodoSort, TodoStatusFilter } from '../../../../entities/todo';
+import type { Todo, TodoSort, TodoStatusFilter } from '../../../../entities/todo';
 import { FilterTodos } from '../../../../features/filter-todos';
 import { SearchTodos } from '../../../../features/search-todos';
 import { Sort } from '../../../../features/sort-todos';
@@ -11,6 +11,7 @@ type TodoControlsProps = {
   searchQuery: string;
   sort: TodoSort;
   statusFilter: TodoStatusFilter;
+  todos: Todo[];
 };
 
 export const TodoControls = (props: TodoControlsProps) => {
@@ -21,12 +22,23 @@ export const TodoControls = (props: TodoControlsProps) => {
     searchQuery,
     sort,
     statusFilter,
+    todos,
   } = props;
+  const completedCount = todos.filter((todo) => todo.completed).length;
+  const counts = {
+    active: todos.length - completedCount,
+    all: todos.length,
+    completed: completedCount,
+  };
 
   return (
     <div className={styles.todoControls}>
       <SearchTodos onChange={onSearchQueryChange} value={searchQuery} />
-      <FilterTodos onChange={onStatusFilterChange} value={statusFilter} />
+      <FilterTodos
+        counts={counts}
+        onChange={onStatusFilterChange}
+        value={statusFilter}
+      />
       <Sort onChange={onSortChange} value={sort} />
     </div>
   );

@@ -1,9 +1,4 @@
-export {
-  createTodo,
-  deleteTodo,
-  getTodos,
-  updateTodo,
-} from './api/todoApi';
+export { TODO_TITLE_MAX_LENGTH } from './model/constants';
 export {
   getVisibleTodos,
   type TodoSort,
@@ -12,3 +7,4 @@ export {
 export { useTodos } from './model/useTodos';
 export { TodoList } from './ui/TodoList';
 export type { CreateTodoDto, Todo, UpdateTodoDto } from './model/types';
+

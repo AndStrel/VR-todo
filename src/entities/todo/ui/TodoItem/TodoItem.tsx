@@ -99,9 +99,6 @@ export const TodoItem = (props: TodoItemProps) => {
       <li className={styles.todoItem}>
         <form className={styles.todoItem__editForm} onSubmit={handleEditSubmit}>
           <label className={styles.todoItem__editLabel}>
-            <span className={styles.todoItem__editLabelText}>
-              Название задачи
-            </span>
             <TextInput
               autoFocus
               disabled={isBusy}
@@ -133,14 +130,14 @@ export const TodoItem = (props: TodoItemProps) => {
     <li className={styles.todoItem}>
       <label className={styles.todoItem__status}>
         <input
+          className={styles.todoItem__checkbox}
           checked={todo.completed}
           disabled={isBusy}
           onChange={handleToggle}
           type="checkbox"
         />
-        <span>Выполнена</span>
+        <span className={styles.todoItem__title}>{todo.title}</span>
       </label>
-      <span className={styles.todoItem__title}>{todo.title}</span>
       <div className={styles.todoItem__actions}>
         <Button disabled={isBusy} onClick={handleEditStart} type="button">
           Редактировать

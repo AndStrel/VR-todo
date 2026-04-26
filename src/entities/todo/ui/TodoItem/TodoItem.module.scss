@@ -13,12 +13,21 @@
     flex: 1;
     min-width: 0;
     overflow-wrap: anywhere;
+
+    .todoItem__checkbox:checked + & {
+      text-decoration: line-through;
+    }
   }
 
   &__status {
     display: flex;
     align-items: center;
     gap: 8px;
+    cursor: pointer;
+  }
+
+  &__checkbox {
+    cursor: pointer;
   }
 
   &__actions {
@@ -40,11 +49,6 @@
     flex-direction: column;
     min-width: 0;
     gap: 6px;
-  }
-
-  &__editLabelText {
-    font-size: var(--font-size-sm);
-    font-weight: 600;
   }
 }
 

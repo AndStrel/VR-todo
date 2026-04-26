@@ -14,7 +14,8 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:e2e": "cypress run",
-    "test:e2e:open": "cypress open"
+    "test:e2e:open": "cypress open",
+    "cypress": "concurrently -k \"npm:dev\" \"npm:test:e2e\" \"npm:test:e2e:open\""
   },
   "dependencies": {
     "@tanstack/react-query": "^5.100.1",

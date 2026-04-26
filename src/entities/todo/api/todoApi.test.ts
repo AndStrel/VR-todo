@@ -2,6 +2,7 @@ import { createTodo, deleteTodo, getTodos, updateTodo } from './todoApi';
 
 describe('todoApi', () => {
   afterEach(() => {
+    vi.useRealTimers();
     vi.unstubAllGlobals();
   });
 
@@ -43,6 +44,51 @@ describe('todoApi', () => {
     );
 
     await expect(getTodos()).rejects.toThrow('Не удалось загрузить задачи');
+  });
+
+  it('нормализует задачи без дат из JSONPlaceholder разными датами', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-04-26T12:00:00.000Z'));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() =>
+        Promise.resolve(
+          new Response(
+            JSON.stringify([
+              {
+                id: 1,
+                title: 'delectus aut autem',
+                completed: false,
+                userId: 1,
+              },
+              {
+                id: 2,
+                title: 'quis ut nam facilis',
+                completed: true,
+                userId: 1,
+              },
+            ]),
+          ),
+        ),
+      ),
+    );
+
+    await expect(getTodos()).resolves.toEqual([
+      {
+        id: 1,
+        title: 'delectus aut autem',
+        completed: false,
+        createdAt: '2026-04-26T12:00:00.000Z',
+        updatedAt: '2026-04-26T12:00:00.000Z',
+      },
+      {
+        id: 2,
+        title: 'quis ut nam facilis',
+        completed: true,
+        createdAt: '2026-04-26T11:59:59.999Z',
+        updatedAt: '2026-04-26T11:59:59.999Z',
+      },
+    ]);
   });
 
   it('создает задачу', async () => {

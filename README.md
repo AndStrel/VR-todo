@@ -56,6 +56,34 @@ npm run test:e2e:open
 npm run cypress
 ```
 
+Открыть Cypress App вместе с dev-сервером:
+
+```bash
+npm run cypress:open
+```
+
+Команды `npm run cypress` и `npm run cypress:open` поднимают отдельные e2e-серверы на портах `5175` и `3011`, поэтому не конфликтуют с обычным `npm run dev`.
+
+## API
+
+В dev-режиме приложение использует локальный API:
+
+```text
+http://localhost:3001
+```
+
+Для production-сборки Vite подставляет `VITE_API_URL` из `.env.production`:
+
+```text
+https://jsonplaceholder.typicode.com
+```
+
+На GitHub Pages запросы `POST`, `PATCH` и `DELETE` выполняются, но JSONPlaceholder не сохраняет изменения после перезагрузки страницы. Для проверки CRUD с сохранением данных запускайте проект локально через `npm run dev`.
+
+## Деплой
+
+Деплой на GitHub Pages выполняется через GitHub Actions при пуше в `main`. Workflow запускает lint, unit-тесты, production-сборку и публикует папку `dist`.
+
 Проверить код линтером:
 
 ```bash
